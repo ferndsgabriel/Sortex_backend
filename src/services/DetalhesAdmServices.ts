@@ -8,22 +8,24 @@ interface queryProps {
     email: string;
     photo: string;
     sub: string;
-    __v: number;
-}
+    __v: number; 
+} // tipando os dados que recebo do meu db
 
 class DetalhesAdmServices{
     async execute(id:string){
         if (!id){
             throw new Error ('Id não enviado');
-        }
-        const admModel = mongoose.model('Administrador', admSchema);
-        const obterAdm : queryProps | null = await admModel.findById(id);
+        } //verifico se estou recebendo um id
+        
+        const admModel = mongoose.model('Administrador', admSchema); // crrio um model da minha tabela adm
+
+        const obterAdm : queryProps | null = await admModel.findById(id); // verifico se existe um adm com o id pasado
 
         if (!obterAdm){
             throw new Error ('Administrador não encontrado');
-        }
+        } // se n existir retorno um erro
 
-        return ({
+        return ({ // se passar retorno os dados recebidos
             name:obterAdm.name,
             email:obterAdm.email,
             photo:obterAdm.photo,

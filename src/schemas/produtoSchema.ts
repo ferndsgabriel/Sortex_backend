@@ -17,7 +17,7 @@ export const produtoSchema: Schema = new Schema({
         type: Number,
         required: true,
     },
-    userRef:{
+    admRef:{
         type: Schema.Types.ObjectId,
         ref: 'Administradores', 
         required: true,

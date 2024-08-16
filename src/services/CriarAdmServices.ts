@@ -15,6 +15,7 @@ interface admProps {
 // Classe para criar adm
 class CriarAdmServices {
     async execute({ name, email, photo, sub }: admProps) {
+
         if (!name || !email || !photo || !sub) {
             throw new Error('Preencha todos os campos.');
         } // n pode enviar nada vazio
@@ -23,7 +24,9 @@ class CriarAdmServices {
             throw new Error('Digite um nome válido');
         } // nome precisa de pelo menos 3 caracteres
 
-        const hashsub = await hash(sub, 8); // cria um hash do sub
+        const hashsub = await hash(sub, 8); // cria um hash do sub 
+        // obs... esse sub é um nome que o google da para token que ele gera quando vc faz login com o google, por isso usei esse nome
+        // não usei o login do google no backend, vou fazer isso no front, por isso estou já chamando de sub e criando um hash como se fosse uma senha
 
         const AdmModel = mongoose.model('Administrador',  admSchema); // agora posso fazer operações na tabela adm
 

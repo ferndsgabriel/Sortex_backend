@@ -38,7 +38,7 @@ function uploadMiddleware() {
     return function (req: Request, res: Response, next: NextFunction) {
         if (!req.files || !Array.isArray(req.files)) {
             return next(new Error("No files uploaded"));
-        }
+        }  
 
         const files = req.files as CustomFile[];
 
@@ -63,7 +63,7 @@ function uploadMiddleware() {
                     try {
                         await fileBlob.makePublic();
                         file.firebaseUrl = `https://storage.googleapis.com/${bucket.name}/${nameFile}`;
-                        resolve(); // Corrigido: Agora está chamando resolve sem parâmetros
+                        resolve(); 
                     } catch (error) {
                         reject(error);
                     }
