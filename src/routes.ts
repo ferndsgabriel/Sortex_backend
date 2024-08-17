@@ -14,6 +14,11 @@ import { LogarAdmController } from "./controlles/LogarAdmController";
 import { DetalhesAdmController } from "./controlles/DetalhesAdmController";
 import { CriarProdutoController } from "./controlles/CriarProdutoController";
 
+//imports pagamento
+import { processPayment } from "./mercadopago/processPayment";
+import { GetSaller } from "./mercadopago/getSaller";
+import getAccessToken from "./mercadopago/axiosToken";
+
 const Multer = multer({ storage: multer.memoryStorage() }); // multer para upload de arquivos
 
 export const routes = Router(); // importando para poder utilizar no App;
@@ -49,3 +54,7 @@ routes.get('/', async (req: Request, res: Response) => {
     routes.get('/adm', AdmMiddleware,  new DetalhesAdmController().handle); // logar
     routes.post('/product', AdmMiddleware, Multer.array('files'), uploadMiddlewareInstance, new CriarProdutoController().handle); // criar produto
     
+    //processar pagamento
+    routes.get('/payment', new processPayment().handle);
+    routes.post('/token', getAccessToken)
+    routes.get('/sallercallback', new GetSaller().handle);

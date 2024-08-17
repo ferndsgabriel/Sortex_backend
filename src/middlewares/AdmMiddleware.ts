@@ -23,7 +23,7 @@ export default async function AdmMiddleware(req: Request, res: Response, next: N
             return res.status(401).send('Rota não autorizada').end();
         } // se n tiver sub n deixo seguir
 
-        req.adm_id = sub; // se tiver crio o uma tipagem do express que passando o id que mandei no sub
+        req.adm_id = sub; // se tiver crio o uma tipagem do express passando o id que mandei no sub
         // criar essa tipagem de adm_id para o request, me permite executar qualquer CRUD no banco de dados
         // que envolva o id desse adm sem precisar que fique digitando o id, apenas extraindo direto do token de authenticação
 
