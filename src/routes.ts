@@ -17,7 +17,6 @@ import { CriarProdutoController } from "./controlles/CriarProdutoController";
 //imports pagamento
 import { processPayment } from "./mercadopago/processPayment";
 import { GetSaller } from "./mercadopago/getSaller";
-import getAccessToken from "./mercadopago/axiosToken";
 
 const Multer = multer({ storage: multer.memoryStorage() }); // multer para upload de arquivos
 
@@ -56,5 +55,4 @@ routes.get('/', async (req: Request, res: Response) => {
     
     //processar pagamento
     routes.get('/payment', new processPayment().handle);
-    routes.post('/token', getAccessToken)
     routes.get('/sallercallback', new GetSaller().handle);
