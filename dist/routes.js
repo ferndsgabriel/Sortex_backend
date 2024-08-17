@@ -8,16 +8,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.routes = void 0;
 // imports funcionamento
 const express_1 = require("express");
+const multer_1 = __importDefault(require("multer"));
 //middlewares imports
-const AdmMiddleware_1 = require("./middlewares/AdmMiddleware");
+const AdmMiddleware_1 = __importDefault(require("./middlewares/AdmMiddleware"));
+const FirebaseMiddlewara_1 = __importDefault(require("./middlewares/FirebaseMiddlewara"));
 //imports controlles
 const mongo_1 = require("./mongo");
 const CriarAdmController_1 = require("./controlles/CriarAdmController");
 const LogarAdmController_1 = require("./controlles/LogarAdmController");
+const DetalhesAdmController_1 = require("./controlles/DetalhesAdmController");
+const CriarProdutoController_1 = require("./controlles/CriarProdutoController");
+//imports pagamento
+const processPayment_1 = require("./mercadopago/processPayment");
+const getSaller_1 = require("./mercadopago/getSaller");
+const axiosToken_1 = __importDefault(require("./mercadopago/axiosToken"));
+const Multer = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() }); // multer para upload de arquivos
 exports.routes = (0, express_1.Router)(); // importando para poder utilizar no App;
 // criando as rotas
 exports.routes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -47,4 +59,9 @@ exports.routes.get('/mongo', (req, res, next) => __awaiter(void 0, void 0, void 
 //endpoints rotas de paginas
 exports.routes.post('/adm', new CriarAdmController_1.CriarAdmController().handle); // cadastrar
 exports.routes.post('/authadm', new LogarAdmController_1.LogarAdmController().handle); // logar
-exports.routes.get('/adm', AdmMiddleware_1.AdmMiddleware, new LogarAdmController_1.LogarAdmController().handle); // logar
+exports.routes.get('/adm', AdmMiddleware_1.default, new DetalhesAdmController_1.DetalhesAdmController().handle); // logar
+exports.routes.post('/product', AdmMiddleware_1.default, Multer.array('files'), FirebaseMiddlewara_1.default, new CriarProdutoController_1.CriarProdutoController().handle); // criar produto
+//processar pagamento
+exports.routes.get('/payment', new processPayment_1.processPayment().handle);
+exports.routes.post('/token', axiosToken_1.default);
+exports.routes.get('/sallercallback', new getSaller_1.GetSaller().handle);

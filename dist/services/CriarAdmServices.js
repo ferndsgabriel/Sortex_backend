@@ -28,7 +28,9 @@ class CriarAdmServices {
             if (name.length <= 3) {
                 throw new Error('Digite um nome válido');
             } // nome precisa de pelo menos 3 caracteres
-            const hashsub = yield (0, bcryptjs_1.hash)(sub, 8); // cria um hash do sub
+            const hashsub = yield (0, bcryptjs_1.hash)(sub, 8); // cria um hash do sub 
+            // obs... esse sub é um nome que o google da para token que ele gera quando vc faz login com o google, por isso usei esse nome
+            // não usei o login do google no backend, vou fazer isso no front, por isso estou já chamando de sub e criando um hash como se fosse uma senha
             const AdmModel = mongoose_1.default.model('Administrador', admSchema_1.admSchema); // agora posso fazer operações na tabela adm
             const emailformatado = (0, formats_1.formatEmail)(email); //formatar o emailremovendo espaços e uppercase
             const emailExiste = yield AdmModel.findOne({ email: emailformatado }); // verifico se o email está em uso

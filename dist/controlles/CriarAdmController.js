@@ -14,12 +14,12 @@ const CriarAdmServices_1 = require("../services/CriarAdmServices");
 class CriarAdmController {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, email, photo, sub } = req.body;
-            const criarAdmServices = new CriarAdmServices_1.CriarAdmServices();
+            const { name, email, photo, sub } = req.body; // obter os dados no body
+            const criarAdmServices = new CriarAdmServices_1.CriarAdmServices(); // instancio o service
             try {
                 const criarAdm = yield criarAdmServices.execute({
                     name, email, photo, sub
-                });
+                }); // tento executar o services
                 return res.status(201).json({ message: 'Administrador criado com sucesso.' }); // sucesso ao criar algo
             }
             catch (error) {

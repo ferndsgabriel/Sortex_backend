@@ -9,23 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LogarAdmController = void 0;
-const LogarAdmServices_1 = require("../services/LogarAdmServices");
-class LogarAdmController {
+exports.DetalhesAdmController = void 0;
+const DetalhesAdmServices_1 = require("../services/DetalhesAdmServices");
+class DetalhesAdmController {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { sub, email } = req.body; // peço o sub, e o email
-            //obs... o sub do token de auth e o sub que é usado na hora de cadastrar/logar são diferentes
-            //o google devolve esse sub como indentificador de acesso quando vc faz login utiliando a conta do google
-            const logarAdmServives = new LogarAdmServices_1.LogarAdmServives(); // instanciar...
+            const id = req.adm_id; // obtenho o id através da tipagem que fiz pro request após receber o sub do token
+            const detalhesAdmServices = new DetalhesAdmServices_1.DetalhesAdmServices(); //instancio... 
             try {
-                const response = yield logarAdmServives.execute({ sub, email });
-                return res.status(200).json(response); //sucesso
+                const response = yield detalhesAdmServices.execute(id);
+                return res.status(200).json(response); //retorno um sucess
             }
             catch (error) {
-                return res.status(400).json(error.message); //erro
+                return res.status(400).json(error); //retorno o erro
             }
         });
     }
 }
-exports.LogarAdmController = LogarAdmController;
+exports.DetalhesAdmController = DetalhesAdmController;
