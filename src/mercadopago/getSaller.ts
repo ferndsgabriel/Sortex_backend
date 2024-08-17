@@ -17,7 +17,7 @@ class GetSaller{
             res.send(`Autorização completa! O access_token é: ${accessToken}`);
         } catch (error) {
             console.error('Erro ao obter o access_token:', error);
-            res.status(500).send('Erro ao processar a autorização.');
+            res.status(500).send(`Erro ao processar a autorização: ${error}`);
         }
     }
 }
