@@ -10,7 +10,7 @@ class GetSaller{
             res.status(400).send('Código de autorização não encontrado.');
             return; // se n tiver um código quando eu chegar nessa rota, significa que o adm n viculou sua conta 
         }
-        console.log(authCode)
+        return res.json(authCode)
     }
 }
 
