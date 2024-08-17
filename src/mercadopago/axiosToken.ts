@@ -3,9 +3,9 @@ import axios from "axios";
 // Substitua pelos valores reais
 const clientId = 'YOUR_CLIENT_ID';
 const clientSecret = 'YOUR_CLIENT_SECRET';
-const authCode = 'YOUR_AUTH_CODE';
 
-const getAccessToken = async () => {
+
+const getAccessToken = async (authCode: string) => {
     try {
     const response = await axios.post('https://api.mercadopago.com/oauth/token', null, {
         params: {
@@ -25,4 +25,6 @@ const getAccessToken = async () => {
     }
 };
 
-getAccessToken();
+
+
+export default getAccessToken;
