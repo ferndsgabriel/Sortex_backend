@@ -1,21 +1,28 @@
-import axios from 'axios';
-import 'dotenv/config';
+import axios from "axios";
 
-async function getAccessToken(authCode: string): Promise<string> {
+// Substitua pelos valores reais
+const clientId = 'YOUR_CLIENT_ID';
+const clientSecret = 'YOUR_CLIENT_SECRET';
+const authCode = 'YOUR_AUTH_CODE';
+
+const getAccessToken = async () => {
     try {
-        const response = await axios.post('https://api.mercadopago.com/oauth/token', {
-            client_id:'3875468438633898',
-            client_secret: 'eq3X60nI9yfXl2lixEIa6ITMfM7HbmYS',
+    const response = await axios.post('https://api.mercadopago.com/oauth/token', null, {
+        params: {
             grant_type: 'authorization_code',
             code: authCode,
-            redirect_uri: `${process.env.BASE_URL}/sallercallback`
-        });
+            redirect_uri: 'https://sortexbackend.vercel.app/sallercallback'  // Deve ser o mesmo URI usado para obter o auth code
+    },
+        auth: {
+        username: '3875468438633898',
+        password: 'eq3X60nI9yfXl2lixEIa6ITMfM7HbmYS'
+        }
+    });
 
-        return response.data;
+    return response.data.access_token;
     } catch (error) {
-        console.error('Erro ao obter o access_token:', error.response?.data || error.message);
-        throw error;
+        console.error('Error getting access token:', error.response ? error.response.data : error.message);
     }
-}
+};
 
-export default getAccessToken;
+getAccessToken();
