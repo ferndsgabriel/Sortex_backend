@@ -11,7 +11,7 @@ async function getAccessToken(authCode: string): Promise<string> {
             redirect_uri: `${process.env.BASE_URL}/sallercallback`
         });
 
-        return response.data.access_token;
+        return response.data;
     } catch (error) {
         console.error('Erro ao obter o access_token:', error.response?.data || error.message);
         throw error;
