@@ -32,7 +32,9 @@ const getAccessToken = (authCode) => __awaiter(void 0, void 0, void 0, function*
         return response.data.access_token;
     }
     catch (error) {
-        return error;
+        return;
+        console.error('Error getting access token:', error.response ? error.response.data : error.message);
+        throw error; // Re-throw the error to be caught in the caller
     }
 });
 exports.default = getAccessToken;
