@@ -20,8 +20,7 @@ const getAccessToken = async (authCode: string) => {
 
         return response.data.access_token;
     } catch (error) {
-        console.error('Error getting access token:', error.response ? error.response.data : error.message);
-        throw error;  // Re-throw the error to be caught in the caller
+        return error
     }
 };
 

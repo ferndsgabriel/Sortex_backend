@@ -28,7 +28,6 @@ const CriarProdutoController_1 = require("./controlles/CriarProdutoController");
 //imports pagamento
 const processPayment_1 = require("./mercadopago/processPayment");
 const getSaller_1 = require("./mercadopago/getSaller");
-const axiosToken_1 = __importDefault(require("./mercadopago/axiosToken"));
 const Multer = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() }); // multer para upload de arquivos
 exports.routes = (0, express_1.Router)(); // importando para poder utilizar no App;
 // criando as rotas
@@ -63,5 +62,4 @@ exports.routes.get('/adm', AdmMiddleware_1.default, new DetalhesAdmController_1.
 exports.routes.post('/product', AdmMiddleware_1.default, Multer.array('files'), FirebaseMiddlewara_1.default, new CriarProdutoController_1.CriarProdutoController().handle); // criar produto
 //processar pagamento
 exports.routes.get('/payment', new processPayment_1.processPayment().handle);
-exports.routes.post('/token', axiosToken_1.default);
 exports.routes.get('/sallercallback', new getSaller_1.GetSaller().handle);

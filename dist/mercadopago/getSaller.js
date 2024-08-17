@@ -17,20 +17,16 @@ const axiosToken_1 = __importDefault(require("./axiosToken"));
 class GetSaller {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const authCode = req.query.code; // onde vou receber o token gerado
+            const authCode = req.query.code;
             if (!authCode) {
                 res.status(400).send('Código de autorização não encontrado.');
-                return; // se n tiver um código quando eu chegar nessa rota, significa que o adm n viculou sua conta 
+                return;
             }
-            try {
-                const accessToken = yield (0, axiosToken_1.default)(authCode); // Troca o authorization code pelo access token
-                console.log(`Autorização completa! O access_token é: ${accessToken}`);
-                res.send(`Autorização completa! O access_token é: ${accessToken}`);
-            }
-            catch (error) {
-                console.error('Erro ao obter o access_token:', error);
-                res.status(500).send('Erro ao processar a autorização.');
-            }
+            yield (0, axiosToken_1.default)(authCode).then((sucess) => {
+                return res.json(sucess);
+            }).catch((error) => {
+                return res.json(error);
+            });
         });
     }
 }

@@ -13,23 +13,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-require("dotenv/config");
-function getAccessToken(authCode) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const response = yield axios_1.default.post('https://api.mercadopago.com/oauth/token', {
-                client_id: process.env.MERCADO_PAGO_CLIENT_ID,
-                client_secret: process.env.MERCADO_PAGO_CLIENT_SECRET,
+// Substitua pelos valores reais
+const clientId = '3875468438633898';
+const clientSecret = 'eq3X60nI9yfXl2lixEIa6ITMfM7HbmYS';
+const getAccessToken = (authCode) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield axios_1.default.post('https://api.mercadopago.com/oauth/token', null, {
+            params: {
                 grant_type: 'authorization_code',
                 code: authCode,
-                redirect_uri: `${process.env.BASE_URL}/sallercallback`
-            });
-            return response.data.access_token;
-        }
-        catch (error) {
-            console.error('Erro ao obter o access_token:', error);
-            throw error;
-        }
-    });
-}
+                redirect_uri: 'https://sortexbackend.vercel.app/sallercallback'
+            },
+            auth: {
+                username: clientId,
+                password: clientSecret
+            }
+        });
+        return response.data.access_token;
+    }
+    catch (error) {
+        return error;
+    }
+});
 exports.default = getAccessToken;

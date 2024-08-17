@@ -10,14 +10,11 @@ class GetSaller {
             return;
         }
 
-        try {
-            const accessToken = await getAccessToken(authCode);
-            console.log(`Autorização completa! O access_token é: ${accessToken}`);
-            res.send(`Autorização completa! O access_token é: ${accessToken}`);
-        } catch (error) {
-            console.error('Erro ao obter o access_token:', error);
-            res.status(500).send(`Erro ao processar a autorização: ${error.message}`);
-        }
+        await getAccessToken(authCode).then((sucess)=>{
+            return res.json(sucess)
+        }).catch((error)=>{
+            return res.json(error);
+        })
     }
 }
 
