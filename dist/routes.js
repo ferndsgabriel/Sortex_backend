@@ -21,10 +21,11 @@ const AdmMiddleware_1 = __importDefault(require("./middlewares/AdmMiddleware"));
 const FirebaseMiddlewara_1 = __importDefault(require("./middlewares/FirebaseMiddlewara"));
 //imports controlles
 const mongo_1 = require("./mongo");
-const CriarAdmController_1 = require("./controlles/CriarAdmController");
-const LogarAdmController_1 = require("./controlles/LogarAdmController");
-const DetalhesAdmController_1 = require("./controlles/DetalhesAdmController");
-const CriarProdutoController_1 = require("./controlles/CriarProdutoController");
+const CriarAdmController_1 = require("./controllers/CriarAdmController");
+const LogarAdmController_1 = require("./controllers/LogarAdmController");
+const DetalhesAdmController_1 = require("./controllers/DetalhesAdmController");
+const CriarProdutoController_1 = require("./controllers/CriarProdutoController");
+const GerarLinkSallerController_1 = require("./controllers/GerarLinkSallerController");
 //imports pagamento
 const processPayment_1 = require("./mercadopago/processPayment");
 const getSaller_1 = require("./mercadopago/getSaller");
@@ -60,6 +61,7 @@ exports.routes.post('/adm', new CriarAdmController_1.CriarAdmController().handle
 exports.routes.post('/authadm', new LogarAdmController_1.LogarAdmController().handle); // logar
 exports.routes.get('/adm', AdmMiddleware_1.default, new DetalhesAdmController_1.DetalhesAdmController().handle); // logar
 exports.routes.post('/product', AdmMiddleware_1.default, Multer.array('files'), FirebaseMiddlewara_1.default, new CriarProdutoController_1.CriarProdutoController().handle); // criar produto
+exports.routes.get('/linksaller', AdmMiddleware_1.default, new GerarLinkSallerController_1.GerarLinkSallerController().handle);
 //processar pagamento
 exports.routes.get('/payment', new processPayment_1.processPayment().handle);
 exports.routes.get('/sallercallback', new getSaller_1.GetSaller().handle);

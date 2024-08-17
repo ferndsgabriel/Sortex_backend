@@ -13,28 +13,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-// Substitua pelos valores reais
 const clientId = '3875468438633898';
 const clientSecret = 'eq3X60nI9yfXl2lixEIa6ITMfM7HbmYS';
+const redirectUri = `${process.env.BASE_URL}/sallercallback`;
 const getAccessToken = (authCode) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield axios_1.default.post('https://api.mercadopago.com/oauth/token', null, {
-            params: {
-                grant_type: 'authorization_code',
-                code: authCode,
-                redirect_uri: 'https://sortexbackend.vercel.app/sallercallback'
-            },
-            auth: {
-                username: clientId,
-                password: clientSecret
+        const response = yield axios_1.default.post('https://api.mercadopago.com/oauth/token', {
+            client_id: clientId,
+            client_secret: clientSecret,
+            code: authCode,
+            grant_type: 'client_credentials',
+            redirect_uri: redirectUri
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
             }
         });
-        return response.data.access_token;
+        const acessToken = response.data.access_token;
+        return acessToken;
     }
     catch (error) {
-        return;
         console.error('Error getting access token:', error.response ? error.response.data : error.message);
-        throw error; // Re-throw the error to be caught in the caller
+        throw error;
     }
 });
 exports.default = getAccessToken;

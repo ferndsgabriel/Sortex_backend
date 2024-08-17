@@ -13,7 +13,6 @@ import { CriarAdmController } from "./controllers/CriarAdmController";
 import { LogarAdmController } from "./controllers/LogarAdmController";
 import { DetalhesAdmController } from "./controllers/DetalhesAdmController";
 import { CriarProdutoController } from "./controllers/CriarProdutoController";
-import { CriarCardController } from "./controllers/CriarCardController";
 import { GerarLinkSallerController } from "./controllers/GerarLinkSallerController";
 
 //imports pagamento
