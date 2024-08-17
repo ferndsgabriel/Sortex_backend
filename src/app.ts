@@ -4,14 +4,12 @@ import 'dotenv/config';
 import cors from "cors";
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
-import axios from "axios";
 
 
 // iniciando aplicação
 const app = express(); 
 const port = process.env.Port || 3333; // definindo nossa porta
 
-app.use(axios);
 app.use(cors()); // chamando a função
 app.use(express.json()); // JSON middleware antes das rotas
 app.use(routes); // pedindo pro app usar as rotas do arquivo exportado
