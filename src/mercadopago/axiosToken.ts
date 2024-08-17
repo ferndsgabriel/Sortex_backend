@@ -3,15 +3,7 @@ import 'dotenv/config';
 
 async function getAccessToken(authCode: string): Promise<string> {
     try {
-        const response = await axios.post('https://api.mercadopago.com/oauth/token', null, {
-            params: {
-                client_id: process.env.MERCADO_PAGO_CLIENT_ID,
-                client_secret: process.env.MERCADO_PAGO_CLIENT_SECRET,
-                grant_type: 'authorization_code',
-                code: authCode,
-                redirect_uri: `${process.env.BASE_URL}/sallercallback`
-            }
-        });
+        const response = await axios.post('https://auth.mercadopago.com.br/authorization?client_id=3875468438633898&response_type=code&platform_id=mp&redirect_uri=https://sortexbackend.vercel.app/sallercallback')
 
         return response.data.access_token;
     } catch (error) {
