@@ -9,12 +9,15 @@ import uploadMiddlewareInstance from "./middlewares/FirebaseMiddlewara";
 
 //imports controlles
 import {connection} from "./mongo";
-import { CriarAdmController } from "./controlles/CriarAdmController";
-import { LogarAdmController } from "./controlles/LogarAdmController";
-import { DetalhesAdmController } from "./controlles/DetalhesAdmController";
-import { CriarProdutoController } from "./controlles/CriarProdutoController";
+import { CriarAdmController } from "./controllers/CriarAdmController";
+import { LogarAdmController } from "./controllers/LogarAdmController";
+import { DetalhesAdmController } from "./controllers/DetalhesAdmController";
+import { CriarProdutoController } from "./controllers/CriarProdutoController";
+import { CriarCardController } from "./controllers/CriarCardController";
+import { GerarLinkSallerController } from "./controllers/GerarLinkSallerController";
 
 //imports pagamento
+
 import { processPayment } from "./mercadopago/processPayment";
 import { GetSaller } from "./mercadopago/getSaller";
 
@@ -52,7 +55,8 @@ routes.get('/', async (req: Request, res: Response) => {
     routes.post('/authadm', new LogarAdmController().handle); // logar
     routes.get('/adm', AdmMiddleware,  new DetalhesAdmController().handle); // logar
     routes.post('/product', AdmMiddleware, Multer.array('files'), uploadMiddlewareInstance, new CriarProdutoController().handle); // criar produto
-    
+    routes.get('/linksaller', AdmMiddleware, new GerarLinkSallerController().handle);
+
     //processar pagamento
     routes.get('/payment', new processPayment().handle);
     routes.get('/sallercallback', new GetSaller().handle);
