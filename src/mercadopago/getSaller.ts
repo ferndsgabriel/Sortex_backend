@@ -10,7 +10,7 @@ class GetSaller{
             res.status(400).send('Código de autorização não encontrado.');
             return; // se n tiver um código quando eu chegar nessa rota, significa que o adm n viculou sua conta 
         }
-        return res.json(authCode);
+        res.json(authCode);
 
         try {
             const accessToken = await getAccessToken(authCode); // Troca o authorization code pelo access token
