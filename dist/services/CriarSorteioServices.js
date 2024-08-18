@@ -25,18 +25,20 @@ class CriarSorteioServices {
                 throw new Error('Digite todos os campos');
             } // verifico se todos os campos necessarios estão sendo enviados
             const admModel = mongoose_1.default.model('Administradores', admSchema_1.admSchema); // obtendo adm model
-            const procurarAdm = yield admModel.findById(id).catch(() => {
+            const procurarAdm = yield admModel.findById(id); // obtendo adm pelo id
+            if (!procurarAdm) {
                 throw new Error('Administrador não encontrado'); // se n tiver o adm...
-            });
+            }
             const cardModel = mongoose_1.default.model('Cartaos', cartaoSchema_1.cardSchema); // card model;
             const pegandoCartao = yield cardModel.findOne({ admRef: id }); // pegando o card do adm
             if (!pegandoCartao) {
                 throw new Error('Cartão não encontrado');
             } // se n encontrar o cartão
             const produtoModel = mongoose_1.default.model('Produtos', produtoSchema_1.produtoSchema); // model do produto
-            const pegandoProduto = yield produtoModel.findById(productId).catch(() => {
+            const pegandoProduto = yield produtoModel.findById(productId); // procurando o produto pelo seu id
+            if (!pegandoProduto) {
                 throw new Error('Produto não encontrado');
-            }); // se n achar o produto...
+            } // se n achar o produto...
             const onDay = new Date(); // pegando a data atual
             if (new Date(dataInicio) < onDay) {
                 throw new Error('A data de início não pode ser menor que o dia atual');

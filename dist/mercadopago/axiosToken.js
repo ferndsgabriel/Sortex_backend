@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
+require("dotenv/config");
 const clientId = process.env.MERCADO_PAGO_CLIENT_ID;
 const clientSecret = process.env.MERCADO_PAGO_CLIENT_SECRET;
 const redirectUri = `${process.env.BASE_URL}/sallercallback`;
@@ -22,15 +23,15 @@ const getAccessToken = (authCode) => __awaiter(void 0, void 0, void 0, function*
             client_id: clientId,
             client_secret: clientSecret,
             code: authCode,
-            grant_type: 'client_credentials',
+            grant_type: 'authorization_code',
             redirect_uri: redirectUri
         }, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-        const acessToken = response.data.access_token;
-        return acessToken;
+        const accessToken = response.data.access_token;
+        return accessToken;
     }
     catch (error) {
         console.error('Error getting access token:', error.response ? error.response.data : error.message);

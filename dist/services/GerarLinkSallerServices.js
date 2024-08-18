@@ -8,9 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GerarLinkSallerServices = void 0;
 require("dotenv/config");
+const admSchema_1 = require("../schemas/admSchema");
+const mongoose_1 = __importDefault(require("mongoose"));
 class GerarLinkSallerServices {
     execute(id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -21,6 +26,11 @@ class GerarLinkSallerServices {
             if (!id) {
                 throw new Error("Id não encontrado");
             }
+            const admModel = mongoose_1.default.model('Administradores', admSchema_1.admSchema); // crrio um model da minha tabela adm
+            const obterAdm = yield admModel.findById(id); // verifico se existe um adm com o id pasado
+            if (!obterAdm) {
+                throw new Error('Administrador não encontrado');
+            } // se
             const baseUrl = 'https://auth.mercadopago.com.br/authorization?';
             const clientId = `client_id=${process.env.MERCADO_PAGO_CLIENT_ID}`;
             const body = '&response_type=code&platform_id=mp&';

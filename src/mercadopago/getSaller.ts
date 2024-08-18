@@ -23,11 +23,12 @@ class GetSaller {
         const accessToken =  await getAccessToken(authCode).then(); 
         //chamo o axios para gerar o acess token atraves do auth token
         // esse acesssToken é o responsavel por poder enviar pagamentos a conta do adm
-
+        res.status(200).json(accessToken);
+        
         if (!accessToken){
             res.status(400).json('Erro ao vincular conta');
         } // se eu n tenho um token...
-        res.status(200).json(accessToken);
+
         const cardModel = mongoose.model('Cartao', cardSchema); // crio um model de card
 
         const obterModels = await cardModel.find({admRef:stateId}); // verifico se meu adm possui uma cartão

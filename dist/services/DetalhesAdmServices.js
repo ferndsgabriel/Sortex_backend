@@ -22,9 +22,10 @@ class DetalhesAdmServices {
                 throw new Error('Id não enviado');
             } //verifico se estou recebendo um id
             const admModel = mongoose_1.default.model('Administradores', admSchema_1.admSchema); // crrio um model da minha tabela adm
-            const obterAdm = yield admModel.findById(id).catch(() => {
+            const obterAdm = yield admModel.findById(id); // verifico se existe um adm com o id pasado
+            if (!obterAdm) {
                 throw new Error('Administrador não encontrado');
-            }); // verifico se existe um adm com o id pasado
+            } // se n existir retorno um erro
             return ({
                 name: obterAdm.name,
                 email: obterAdm.email,

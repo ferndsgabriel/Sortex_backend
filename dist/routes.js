@@ -67,5 +67,6 @@ exports.routes.get('/linksaller', AdmMiddleware_1.default, new GerarLinkSallerCo
 exports.routes.get('/products', AdmMiddleware_1.default, new ListProdutosAdmController_1.ListProdutosAdmController().handle);
 exports.routes.post('/sortex', AdmMiddleware_1.default, new CriarSorteioController_1.CriarSorteioController().handle);
 //processar pagamento
-exports.routes.get('/payment', new processPayment_1.processPayment().handle);
+exports.routes.post('/payment', AdmMiddleware_1.default, new processPayment_1.processPayment().handle);
 exports.routes.get('/sallercallback', new getSaller_1.GetSaller().handle);
+exports.routes.get('/test,');
