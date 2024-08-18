@@ -22,10 +22,11 @@ class CriarSorteioServices {
 
         const admModel = mongoose.model('Administradores', admSchema); // obtendo adm model
 
-        const procurarAdm = await admModel.findById(id).catch(() => { // obtendo adm pelo id
-            throw new Error('Administrador não encontrado');  // se n tiver o adm...
-        });
+        const procurarAdm = await admModel.findById(id);// obtendo adm pelo id
 
+        if (!procurarAdm){
+            throw new Error('Administrador não encontrado');  // se n tiver o adm...
+        }
         const cardModel = mongoose.model('Cartaos', cardSchema); // card model;
 
         const pegandoCartao = await cardModel.findOne({ admRef: id }); // pegando o card do adm
@@ -36,10 +37,12 @@ class CriarSorteioServices {
 
         const produtoModel = mongoose.model('Produtos', produtoSchema); // model do produto
 
-        const pegandoProduto = await produtoModel.findById(productId).catch(() => { // procurando o produto pelo seu id
-            throw new Error('Produto não encontrado');
-        }) // se n achar o produto...
+        const pegandoProduto = await produtoModel.findById(productId) // procurando o produto pelo seu id
 
+        if (!pegandoProduto){
+            throw new Error('Produto não encontrado');
+        }  // se n achar o produto...
+        
         const onDay = new Date(); // pegando a data atual
 
         if (new Date(dataInicio) < onDay) {

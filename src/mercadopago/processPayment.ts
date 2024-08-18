@@ -1,41 +1,24 @@
 import { MercadoPagoConfig, Payment } from 'mercadopago';
-import 'dotenv/config';
 
-interface paymentProps{
-	value:number
-}
 class processPayment  {
-	async handle({value}:paymentProps){
-
-		const client = new MercadoPagoConfig(
-			{ 
-				accessToken: process.env.MERCADO_PAG0_ACESS_TOKEN, 
-				options: { timeout: 5000, idempotencyKey: 'abc' }
-			}
-		);
+	async handle(){
 	
+		const acessToken = 'APP_USR-3875468438633898-081813-9d31fe90f35d2d54d472518259ab45d8-247395576';
+
+		const client = new MercadoPagoConfig({ accessToken: acessToken, options: { timeout: 5000} });
 
 		const payment = new Payment(client);
-		
+
 		const body = {
-			transaction_amount: value,
-			description: 'Teste',
+			transaction_amount: 0.01,
+			description: 'teste',
 			payment_method_id: 'pix',
 			payer: {
 				email: 'gabrielsilvafernandes5760@gmail.com'
 			},
 		};
 
-		const bodyMe = {
-			transaction_amount: value,
-			description: 'Teste',
-			payment_method_id: 'pix',
-			payer: {
-				email: 'gabrielsilvafernandes5760@gmail.com'
-			},
-		};
-		
-		await payment.create({ body }).then(console.log).catch(console.log);
+		payment.create({ body}).then(console.log).catch(console.log);
 	}
 }
 

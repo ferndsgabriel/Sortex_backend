@@ -60,5 +60,8 @@ routes.get('/', async (req: Request, res: Response) => {
     routes.post('/sortex', AdmMiddleware, new CriarSorteioController().handle);
 
     //processar pagamento
-    routes.get('/payment', new processPayment().handle);
+    routes.post('/payment',  AdmMiddleware, new processPayment().handle);
     routes.get('/sallercallback', new GetSaller().handle);
+
+
+    routes.get('/test,')
