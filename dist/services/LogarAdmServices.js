@@ -24,7 +24,7 @@ class LogarAdmServives {
             if (!sub || !email) {
                 throw new Error("Erro ao logar"); // verifico se recebo todos os dados
             }
-            const admModel = mongoose_1.default.model('Administrador', admSchema_1.admSchema); // obtenho uma referencia de admModel
+            const admModel = mongoose_1.default.model('Administradores', admSchema_1.admSchema); // obtenho uma referencia de admModel
             const emailFormatado = (0, formats_1.formatEmail)(email); // formato o email
             const emailExiste = yield admModel.findOne(// verifico se este email existe no meu banco
             { email: emailFormatado });

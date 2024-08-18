@@ -13,8 +13,7 @@ class processPayment  {
 				options: { timeout: 5000, idempotencyKey: 'abc' }
 			}
 		);
-		
-
+	
 
 		const payment = new Payment(client);
 		

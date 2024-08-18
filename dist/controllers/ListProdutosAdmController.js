@@ -9,22 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DetalhesAdmController = void 0;
-const DetalhesAdmServices_1 = require("../services/DetalhesAdmServices");
-class DetalhesAdmController {
+exports.ListProdutosAdmController = void 0;
+const ListProdutosAdmServices_1 = require("../services/ListProdutosAdmServices");
+class ListProdutosAdmController {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = req.adm_id; // obtenho o id através da tipagem que fiz pro request após receber o sub do token
-            const detalhesAdmServices = new DetalhesAdmServices_1.DetalhesAdmServices(); //instancio... 
+            const id = req.adm_id;
+            const listProdutosAdmServices = new ListProdutosAdmServices_1.ListProdutosAdmServices();
             try {
-                const response = yield detalhesAdmServices.execute(id);
-                return res.status(200).json(response); //retorno um sucess
+                const response = yield listProdutosAdmServices.execute(id);
+                return res.status(200).json(response);
             }
             catch (error) {
                 return res.status(400).json({ error: error.message });
-                ; //retorno o erro
             }
         });
     }
 }
-exports.DetalhesAdmController = DetalhesAdmController;
+exports.ListProdutosAdmController = ListProdutosAdmController;

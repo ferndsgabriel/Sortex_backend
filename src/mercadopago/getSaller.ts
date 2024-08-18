@@ -27,7 +27,7 @@ class GetSaller {
         if (!accessToken){
             res.status(400).json('Erro ao vincular conta');
         } // se eu n tenho um token...
-
+        
         const cardModel = mongoose.model('Cartao', cardSchema); // crio um model de card
 
         const obterModels = await cardModel.find({admRef:stateId}); // verifico se meu adm possui uma cartão

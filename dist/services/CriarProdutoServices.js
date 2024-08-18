@@ -28,12 +28,11 @@ class CriarProdutoServices {
             if (photos.length < 1) {
                 throw new Error('Envie pelo menos uma foto do produto');
             } // tem que ter pelo menos uma foto
-            const produtoModel = mongoose_1.default.model("Produtos", produtoSchema_1.produtoSchema); //inicio o model de produtos
-            const admModel = mongoose_1.default.model('Administrador', admSchema_1.admSchema); //inicio o model de adm, pois produto tem adm como chave secundaria
-            const obterAdm = yield admModel.findById(id); // verifico se tenho o adm
-            if (!obterAdm) {
+            const admModel = mongoose_1.default.model('Administradores', admSchema_1.admSchema); //inicio o model de adm, pois produto tem adm como chave secundaria
+            const obterAdm = yield admModel.findById(id).catch(() => {
                 throw new Error('Administrador não encontrado');
-            } // se n tenho...
+            }); // verifico se tenho o adm
+            const produtoModel = mongoose_1.default.model("Produtos", produtoSchema_1.produtoSchema); //inicio o model de produtos
             const criarProduto = new produtoModel({
                 name,
                 description,
@@ -41,7 +40,9 @@ class CriarProdutoServices {
                 price,
                 admRef: id
             }); // passou por tudo posso criar o produto
-            const response = yield criarProduto.save();
+            const response = yield criarProduto.save().catch(() => {
+                throw new Error('Erro ao criar produto.');
+            });
             return response;
         });
     }

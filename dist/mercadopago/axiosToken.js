@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-const clientId = '3875468438633898';
-const clientSecret = 'eq3X60nI9yfXl2lixEIa6ITMfM7HbmYS';
+const clientId = process.env.MERCADO_PAGO_CLIENT_ID;
+const clientSecret = process.env.MERCADO_PAGO_CLIENT_SECRET;
 const redirectUri = `${process.env.BASE_URL}/sallercallback`;
 const getAccessToken = (authCode) => __awaiter(void 0, void 0, void 0, function* () {
     try {

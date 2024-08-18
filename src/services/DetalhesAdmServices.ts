@@ -17,13 +17,12 @@ class DetalhesAdmServices{
             throw new Error ('Id não enviado');
         } //verifico se estou recebendo um id
         
-        const admModel = mongoose.model('Administrador', admSchema); // crrio um model da minha tabela adm
+        const admModel = mongoose.model('Administradores', admSchema); // crrio um model da minha tabela adm
 
-        const obterAdm : queryProps | null = await admModel.findById(id); // verifico se existe um adm com o id pasado
-
-        if (!obterAdm){
+        const obterAdm:queryProps | any = await admModel.findById(id).catch(()=>{
             throw new Error ('Administrador não encontrado');
-        } // se n existir retorno um erro
+        }) // verifico se existe um adm com o id pasado
+
 
         return ({ // se passar retorno os dados recebidos
             name:obterAdm.name,

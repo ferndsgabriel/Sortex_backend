@@ -12,26 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DetalhesAdmServices = void 0;
+exports.ListProdutosAdmServices = void 0;
+const produtoSchema_1 = require("../schemas/produtoSchema");
 const mongoose_1 = __importDefault(require("mongoose"));
-const admSchema_1 = require("../schemas/admSchema");
-class DetalhesAdmServices {
+class ListProdutosAdmServices {
     execute(id) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!id) {
-                throw new Error('Id não enviado');
-            } //verifico se estou recebendo um id
-            const admModel = mongoose_1.default.model('Administradores', admSchema_1.admSchema); // crrio um model da minha tabela adm
-            const obterAdm = yield admModel.findById(id).catch(() => {
-                throw new Error('Administrador não encontrado');
-            }); // verifico se existe um adm com o id pasado
-            return ({
-                name: obterAdm.name,
-                email: obterAdm.email,
-                photo: obterAdm.photo,
-                id: obterAdm._id
-            });
+                throw new Error('Envie um id');
+            } // mando um erro se n tiver um id
+            const produtosModel = mongoose_1.default.model('Produtos', produtoSchema_1.produtoSchema); //obtenho a model de produtos
+            const findAll = produtosModel.find({ admRef: id }).sort({ name: 1 }); // busco todos os produtos que tenho o adm como ref
+            return findAll; //retorno todos os produtos
         });
     }
 }
-exports.DetalhesAdmServices = DetalhesAdmServices;
+exports.ListProdutosAdmServices = ListProdutosAdmServices;

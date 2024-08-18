@@ -25,7 +25,7 @@ class LogarAdmServives {
             throw new Error("Erro ao logar"); // verifico se recebo todos os dados
         }
 
-        const admModel = mongoose.model('Administrador', admSchema); // obtenho uma referencia de admModel
+        const admModel = mongoose.model('Administradores', admSchema); // obtenho uma referencia de admModel
 
         const emailFormatado = formatEmail(email); // formato o email
 

@@ -28,7 +28,7 @@ class CriarAdmServices {
         // obs... esse sub é um nome que o google da para token que ele gera quando vc faz login com o google, por isso usei esse nome
         // não usei o login do google no backend, vou fazer isso no front, por isso estou já chamando de sub e criando um hash como se fosse uma senha
 
-        const AdmModel = mongoose.model('Administrador',  admSchema); // agora posso fazer operações na tabela adm
+        const AdmModel = mongoose.model('Administradores',  admSchema); // agora posso fazer operações na tabela adm
 
         const emailformatado = formatEmail(email); //formatar o emailremovendo espaços e uppercase
 
@@ -46,7 +46,9 @@ class CriarAdmServices {
             sub: hashsub,
         });
 
-        await criarAdm.save(); // executo a função
+        await criarAdm.save().catch(()=>{
+            throw new Error ('Erro ao criar administrador')
+        }) // executo a função
 
         return {ok:true}
     }
