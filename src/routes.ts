@@ -15,9 +15,9 @@ import { DetalhesAdmController } from "./controllers/DetalhesAdmController";
 import { CriarProdutoController } from "./controllers/CriarProdutoController";
 import { GerarLinkSallerController } from "./controllers/GerarLinkSallerController";
 import { ListProdutosAdmController } from "./controllers/ListProdutosAdmController";
+import { CriarSorteioController } from "./controllers/CriarSorteioController";
 
 //imports pagamento
-
 import { processPayment } from "./mercadopago/processPayment";
 import { GetSaller } from "./mercadopago/getSaller";
 
@@ -57,6 +57,7 @@ routes.get('/', async (req: Request, res: Response) => {
     routes.post('/product', AdmMiddleware, Multer.array('files'), uploadMiddlewareInstance, new CriarProdutoController().handle); // criar produto
     routes.get('/linksaller', AdmMiddleware, new GerarLinkSallerController().handle);
     routes.get('/products', AdmMiddleware, new ListProdutosAdmController().handle);
+    routes.post('/sortex', AdmMiddleware, new CriarSorteioController().handle);
 
     //processar pagamento
     routes.get('/payment', new processPayment().handle);

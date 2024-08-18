@@ -12,8 +12,7 @@ class CriarAdmController {
             }); // tento executar o services
             return res.status(201).json({ message: 'Administrador criado com sucesso.' }); // sucesso ao criar algo
         }catch(error){
-            console.log(error.message);
-            return res.status(400).json(error.message); // erro do cliente
+            return res.status(400).json({error:error.message}); // erro do cliente
         }
     }
 }

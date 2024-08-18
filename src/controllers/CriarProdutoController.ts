@@ -29,7 +29,7 @@ class CriarProdutoController {
             }); // faço um try e catch e retorno um sucesso ou erro
             return res.status(201).json(response);
         } catch (error) {
-            return res.status(400).json(error.message);
+            return res.status(400).json({error:error.message});
         }
     }
 }
