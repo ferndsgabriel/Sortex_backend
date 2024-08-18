@@ -12,12 +12,12 @@ class GetSaller {
         const stateId = req.query.state as string; // recebo o id do user 
 
         if (!authCode) {
-            res.status(400).send('Código de autorização não encontrado.');
+            res.status(400).json('Código de autorização não encontrado.');
             return;
         } // se n tiver o token.... 
 
         if (!stateId){
-            res.status(400).send('Id não encontrado');
+            res.status(400).json('Id não encontrado');
         } // se eu n receber o id...
 
         const accessToken =  await getAccessToken(authCode).then(); 
@@ -25,7 +25,7 @@ class GetSaller {
         // esse acesssToken é o responsavel por poder enviar pagamentos a conta do adm
 
         if (!accessToken){
-            res.status(400).send('Erro ao vincular conta');
+            res.status(400).json('Erro ao vincular conta');
         } // se eu n tenho um token...
 
         const cardModel = mongoose.model('Cartao', cardSchema); // crio um model de card
@@ -33,7 +33,7 @@ class GetSaller {
         const obterModels = await cardModel.find({admRef:stateId}); // verifico se meu adm possui uma cartão
 
         if (obterModels.length > 0){
-            res.status(400).send('Você já possui uma conta vinculada');
+            res.status(400).json('Você já possui uma conta vinculada');
         } // se ele tiver...
 
         const newCard = new cardModel({
@@ -43,7 +43,7 @@ class GetSaller {
 
         await newCard.save();
 
-        return res.status(201).send('Conta vinculada com sucesso.');
+        return res.status(201).json('Conta vinculada com sucesso.');
 
     }
 }
