@@ -1,4 +1,5 @@
 import axios from 'axios';
+import "dotenv/config";
 
 const clientId = process.env.MERCADO_PAGO_CLIENT_ID;
 const clientSecret = process.env.MERCADO_PAGO_CLIENT_SECRET;

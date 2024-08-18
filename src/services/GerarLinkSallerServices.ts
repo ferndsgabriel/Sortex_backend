@@ -1,4 +1,15 @@
 import "dotenv/config";
+import { admSchema } from "../schemas/admSchema";
+import mongoose, {Types} from "mongoose";
+
+interface queryProps {
+    _id: Types.ObjectId;
+    name: string;
+    email: string;
+    photo: string;
+    sub: string;
+    __v: number; 
+} // tipando os dados que recebo do meu db
 
 class GerarLinkSallerServices {
     async execute(id:string) {
@@ -11,6 +22,14 @@ class GerarLinkSallerServices {
         if (!id){
             throw new Error ("Id não encontrado")
         }
+
+        const admModel = mongoose.model('Administradores', admSchema); // crrio um model da minha tabela adm
+
+        const obterAdm : queryProps | null = await admModel.findById(id); // verifico se existe um adm com o id pasado
+
+        if (!obterAdm){
+            throw new Error ('Administrador não encontrado');
+        } // se
 
         const baseUrl = 'https://auth.mercadopago.com.br/authorization?'; 
         const clientId = `client_id=${process.env.MERCADO_PAGO_CLIENT_ID}`;

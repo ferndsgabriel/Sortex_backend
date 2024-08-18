@@ -28,9 +28,11 @@ class CriarProdutoServices{
 
         const admModel = mongoose.model('Administradores', admSchema); //inicio o model de adm, pois produto tem adm como chave secundaria
 
-        const obterAdm = await admModel.findById(id).catch(()=>{
+        const obterAdm = await admModel.findById(id);   // verifico se tenho o adm
+    
+        if (!obterAdm){
             throw new Error ('Administrador não encontrado');
-        }) // verifico se tenho o adm
+        } // se n tiver o adm
 
         const produtoModel = mongoose.model("Produtos", produtoSchema); //inicio o model de produtos
 
@@ -43,7 +45,7 @@ class CriarProdutoServices{
         }); // passou por tudo posso criar o produto
 
         const response = await criarProduto.save().catch(()=>{
-            throw new Error ('Erro ao criar produto.');
+            throw new Error ('Administrador não encontrado');
         })
         
         return response

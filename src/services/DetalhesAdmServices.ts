@@ -19,10 +19,11 @@ class DetalhesAdmServices{
         
         const admModel = mongoose.model('Administradores', admSchema); // crrio um model da minha tabela adm
 
-        const obterAdm:queryProps | any = await admModel.findById(id).catch(()=>{
-            throw new Error ('Administrador não encontrado');
-        }) // verifico se existe um adm com o id pasado
+        const obterAdm : queryProps | null = await admModel.findById(id); // verifico se existe um adm com o id pasado
 
+        if (!obterAdm){
+            throw new Error ('Administrador não encontrado');
+        } // se n existir retorno um erro
 
         return ({ // se passar retorno os dados recebidos
             name:obterAdm.name,
