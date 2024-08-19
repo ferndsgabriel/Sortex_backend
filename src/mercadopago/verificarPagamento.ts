@@ -1,0 +1,68 @@
+import { Request, Response } from 'express';
+import axiosPayment from './axiosPayment';
+import mongoose, { Schema, Document } from 'mongoose';
+import { sorteioSchema } from '../schemas/sorteioShema';
+
+interface Rifa {
+    id: number;
+    status: string;
+    user: {
+        name: string;
+        email: string;
+        whatsapp: string;
+    };
+}
+
+interface SorteioProps extends Document {
+    rifas: Rifa[];
+}
+
+class VerificarPagamento {
+    async handle(req: Request, res: Response) {
+        const { data } = req.body;
+        const id = data.id;
+
+        try {
+            const response = await axiosPayment(id);
+            const { status, metadata: { sorteio_id: sorteioId, user } } = response.data;
+
+            const sorteioModel = mongoose.model('Sorteios', sorteioSchema);
+            const procurarSorteio = await sorteioModel.findById<SorteioProps>(sorteioId).exec();
+
+            if (!procurarSorteio) {
+                return res.status(400).json('Sorteio não encontrado');
+            }
+
+            const rifaIndex = procurarSorteio.rifas.findIndex((rifa: Rifa) => rifa.id.toString() === id.toString());
+
+            if (rifaIndex === -1) {
+                const newRifa = { id, status, user };
+
+                await sorteioModel.findByIdAndUpdate(
+                    sorteioId,
+                    { $push: { rifas: newRifa } },
+                    { new: true }
+                );
+                console.log('Nova rifa adicionada com sucesso');
+            } else {
+                // Atualiza o status da rifa existente
+                if (status === 'approved') {
+                    procurarSorteio.rifas[rifaIndex].status = status;
+                } else if (['cancelled', 'refunded', 'charged_back'].includes(status)) {
+                    procurarSorteio.rifas.splice(rifaIndex, 1);
+                }
+
+                await procurarSorteio.save();
+                console.log(`Rifa atualizada com sucesso, status: ${status}`);
+            }
+
+            res.status(200).json('Status da rifa atualizado com sucesso');
+
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).json({ error: 'Erro ao verificar o pagamento' });
+        }
+    }
+}
+
+export { VerificarPagamento };

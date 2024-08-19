@@ -1,10 +1,10 @@
 import mongoose, { Types } from "mongoose"
-import processPayment from "../mercadopago/processPayment"
+import gerarLinkPagamento from "../mercadopago/gerarLinkPagamento";
 import { sorteioSchema } from "../schemas/sorteioShema";
 import { cardSchema } from "../schemas/cartaoSchema";
 
 interface pagamentoProps{
-    sorteioId: Types.ObjectId;
+    sorteioId: string;
     metodoDePagamento: string;
     email: string;
     name: string;
@@ -16,6 +16,7 @@ interface sorteioProps {
     admRef: string;
     price: number;
 }
+
 
 class GerarLinkPagamentoRifaServices {
 
@@ -43,24 +44,47 @@ class GerarLinkPagamentoRifaServices {
 
         const descricao = `Pagamento da rifa: ${procurarSorteio.title}`; // obtenho a descrição do sorteio
         const preco = procurarSorteio.price; // o preço da rifa
-        const accessToken: string | any = procurarCard.acessToken // access token para direcionar o pagamento
+        const accessToken: string | any = procurarCard.accessToken // access token para direcionar o pagamento
 
         // Chama a função processPayment com os parâmetros corretos
-        const response = await processPayment({
-            accessToken: accessToken,
+
+        const user = {
+            name:name,
+            email:email,
+            whatsapp:whatsapp
+        }
+        const response = await  gerarLinkPagamento({accessToken: accessToken,
             amount: preco,
             description: descricao,
-            email: email,
+            user:user,
+            method: metodoDePagamento,
+            sorteioId:sorteioId
+        });
+
+        const id = response.id;
+        const status = response.status;
+
+        const newPush = {
+            id:id,
+            status:status,
             user:{
                 email:email,
                 whatsapp:whatsapp,
                 name:name  
-            },
-            method: metodoDePagamento,
-            sorteioId:sorteioId.toString()
-        });
+            }
+        }
+        
+        await sorteioModel.findByIdAndUpdate(
+            sorteioId, 
+            { $push: { rifas:newPush } }, 
+            { new: true } 
+        ).then((sucess)=>{
+            console.log('pagamento criado com sucesso');
+        }).catch((error)=>{
+            console.log(error)
+        })
 
-        return response
+        return response;
     }
 
 }

@@ -20,7 +20,7 @@ import { GerarLinkPagamentoRifaController } from "./controllers/GerarLinkPagamen
 
 //imports pagamento callback
 import { GetSaller } from "./mercadopago/getSaller";
-
+import { VerificarPagamento } from "./mercadopago/verificarPagamento";
 
 const Multer = multer({ storage: multer.memoryStorage() }); // multer para upload de arquivos
 
@@ -63,6 +63,7 @@ routes.get('/', async (req: Request, res: Response) => {
 
     //pagamento callback
     routes.get('/sallercallback', new GetSaller().handle);
+    routes.post('/paymentcallback', new VerificarPagamento().handle);
 
 
     routes.get('/test,')

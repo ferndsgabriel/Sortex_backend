@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import getAccessToken from './axiosToken';
+import axiosSaller from './axiosSaller';
 import { cardSchema } from '../schemas/cartaoSchema';
 import mongoose from 'mongoose';
 
@@ -19,7 +19,7 @@ class GetSaller {
             res.status(400).json('Id não encontrado');
         } // se eu n receber o id...
 
-        const accessToken =  await getAccessToken(authCode).then(); 
+        const accessToken =  await axiosSaller(authCode).then(); 
         //chamo o axios para gerar o acess token atraves do auth token
         // esse acesssToken é o responsavel por poder enviar pagamentos a conta do adm
         
