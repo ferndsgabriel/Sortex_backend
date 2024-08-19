@@ -16,10 +16,11 @@ import { CriarProdutoController } from "./controllers/CriarProdutoController";
 import { GerarLinkSallerController } from "./controllers/GerarLinkSallerController";
 import { ListProdutosAdmController } from "./controllers/ListProdutosAdmController";
 import { CriarSorteioController } from "./controllers/CriarSorteioController";
+import { GerarLinkPagamentoRifaController } from "./controllers/GerarLinkPagamentoRifaController";
 
-//imports pagamento
-import { processPayment } from "./mercadopago/processPayment";
+//imports pagamento callback
 import { GetSaller } from "./mercadopago/getSaller";
+
 
 const Multer = multer({ storage: multer.memoryStorage() }); // multer para upload de arquivos
 
@@ -58,9 +59,9 @@ routes.get('/', async (req: Request, res: Response) => {
     routes.get('/linksaller', AdmMiddleware, new GerarLinkSallerController().handle);
     routes.get('/products', AdmMiddleware, new ListProdutosAdmController().handle);
     routes.post('/sortex', AdmMiddleware, new CriarSorteioController().handle);
+    routes.post('/payment',  new GerarLinkPagamentoRifaController().handle);
 
-    //processar pagamento
-    routes.post('/payment',  AdmMiddleware, new processPayment().handle);
+    //pagamento callback
     routes.get('/sallercallback', new GetSaller().handle);
 
 

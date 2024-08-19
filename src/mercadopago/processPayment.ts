@@ -1,25 +1,41 @@
 import { MercadoPagoConfig, Payment } from 'mercadopago';
+import { formatEmail } from '../utils/formats';
 
-class processPayment  {
-	async handle(){
-	
-		const acessToken = 'APP_USR-3875468438633898-081813-9d31fe90f35d2d54d472518259ab45d8-247395576';
-
-		const client = new MercadoPagoConfig({ accessToken: acessToken, options: { timeout: 5000} });
-
-		const payment = new Payment(client);
-
-		const body = {
-			transaction_amount: 0.01,
-			description: 'teste',
-			payment_method_id: 'pix',
-			payer: {
-				email: 'gabrielsilvafernandes5760@gmail.com'
-			},
-		};
-
-		payment.create({ body}).then(console.log).catch(console.log);
-	}
+interface paymentProps{
+	accessToken:string;
+	method:string;
+	email:string;
+	amount:number;
+	description:string;
+	user:{
+		name:string;
+		email:string;
+		whatsapp:string
+	};
+	sorteioId:string
 }
 
-export {processPayment}
+async function processPayment({accessToken, amount, description, user, method, sorteioId}:paymentProps){
+
+	const client = new MercadoPagoConfig({ accessToken: 'APP_USR-3875468438633898-081818-a0e702f4a186aa4cb928da837ef61eda-247395576', options: { timeout: 5000} });
+
+	const payment = new Payment(client);
+
+	const body = {
+		transaction_amount: amount,
+		description: description,
+		payment_method_id: method,
+		payer: {
+			email: formatEmail(user.email),
+			name:user.name,
+			whatsapp:user.whatsapp
+		},
+		metadata:{
+			sorteioId:sorteioId
+		}
+	};
+
+	payment.create({ body}).then(console.log).catch(console.log);
+}
+
+export default processPayment;

@@ -12,7 +12,7 @@ const getAccessToken = async (authCode: string) => {
             client_id: clientId,
             client_secret: clientSecret,
             code: authCode,
-            grant_type: 'authorization_code',  
+            grant_type: 'client_credentials',  
             redirect_uri: redirectUri
         }, {
             headers: {
