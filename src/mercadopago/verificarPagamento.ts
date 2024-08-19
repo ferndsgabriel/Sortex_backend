@@ -42,7 +42,7 @@ class VerificarPagamento {
                 updatedRifas.push(newRifa);
                 console.log('Nova rifa adicionada com sucesso');
             } else {
-                if (status === 'approved') {
+                if (status == 'approved') {
                     updatedRifas[rifaIndex].status = status;
                 } else if (['cancelled', 'refunded', 'charged_back'].includes(status)) {
                     updatedRifas.splice(rifaIndex, 1); // Remove a rifa do array se o status for negativo
