@@ -9,23 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CriarAdmController = void 0;
-const CriarAdmServices_1 = require("../services/CriarAdmServices");
-class CriarAdmController {
+exports.GerarLinkPagamentoRifaController = void 0;
+const GerarLinkPagamentoRifaServices_1 = require("../services/GerarLinkPagamentoRifaServices");
+class GerarLinkPagamentoRifaController {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, email, photo, sub } = req.body; // obter os dados no body
-            const criarAdmServices = new CriarAdmServices_1.CriarAdmServices(); // instancio o service
+            const { sorteioId, metodoDePagamento, email, name, whatsapp } = req.body;
+            const gerarLinkPagamentoRifaServices = new GerarLinkPagamentoRifaServices_1.GerarLinkPagamentoRifaServices();
             try {
-                yield criarAdmServices.execute({
-                    name, email, photo, sub
-                }); // tento executar o services
-                return res.status(201).json({ message: 'Administrador criado com sucesso.' }); // sucesso ao criar algo
+                const response = yield gerarLinkPagamentoRifaServices.execute({
+                    sorteioId, metodoDePagamento, email, name, whatsapp
+                });
+                return res.status(200).json(response);
             }
             catch (error) {
-                return res.status(400).json({ error: error.message }); // erro do cliente
+                return res.status(400).json({ error: error.message });
+                ;
             }
         });
     }
 }
-exports.CriarAdmController = CriarAdmController;
+exports.GerarLinkPagamentoRifaController = GerarLinkPagamentoRifaController;

@@ -28,9 +28,11 @@ const CriarProdutoController_1 = require("./controllers/CriarProdutoController")
 const GerarLinkSallerController_1 = require("./controllers/GerarLinkSallerController");
 const ListProdutosAdmController_1 = require("./controllers/ListProdutosAdmController");
 const CriarSorteioController_1 = require("./controllers/CriarSorteioController");
-//imports pagamento
-const processPayment_1 = require("./mercadopago/processPayment");
+const GerarLinkPagamentoRifaController_1 = require("./controllers/GerarLinkPagamentoRifaController");
+const FinalizarSorteioController_1 = require("./controllers/FinalizarSorteioController");
+//imports pagamento callback
 const getSaller_1 = require("./mercadopago/getSaller");
+const verificarPagamento_1 = require("./mercadopago/verificarPagamento");
 const Multer = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() }); // multer para upload de arquivos
 exports.routes = (0, express_1.Router)(); // importando para poder utilizar no App;
 // criando as rotas
@@ -66,7 +68,8 @@ exports.routes.post('/product', AdmMiddleware_1.default, Multer.array('files'), 
 exports.routes.get('/linksaller', AdmMiddleware_1.default, new GerarLinkSallerController_1.GerarLinkSallerController().handle);
 exports.routes.get('/products', AdmMiddleware_1.default, new ListProdutosAdmController_1.ListProdutosAdmController().handle);
 exports.routes.post('/sortex', AdmMiddleware_1.default, new CriarSorteioController_1.CriarSorteioController().handle);
-//processar pagamento
-exports.routes.post('/payment', AdmMiddleware_1.default, new processPayment_1.processPayment().handle);
+exports.routes.post('/payment', new GerarLinkPagamentoRifaController_1.GerarLinkPagamentoRifaController().handle);
+exports.routes.put('/finalizar', AdmMiddleware_1.default, new FinalizarSorteioController_1.FinalizarSorteioController().handle);
+//pagamento callback
 exports.routes.get('/sallercallback', new getSaller_1.GetSaller().handle);
-exports.routes.get('/test,');
+exports.routes.post('/paymentcallback', new verificarPagamento_1.VerificarPagamento().handle);

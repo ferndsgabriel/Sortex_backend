@@ -9,23 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CriarAdmController = void 0;
-const CriarAdmServices_1 = require("../services/CriarAdmServices");
-class CriarAdmController {
+exports.FinalizarSorteioController = void 0;
+const FinalizarSorteioServices_1 = require("../services/FinalizarSorteioServices");
+class FinalizarSorteioController {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, email, photo, sub } = req.body; // obter os dados no body
-            const criarAdmServices = new CriarAdmServices_1.CriarAdmServices(); // instancio o service
+            const { id } = req.body;
+            const finalizarSorteioServices = new FinalizarSorteioServices_1.FinalizarSorteioServices();
             try {
-                yield criarAdmServices.execute({
-                    name, email, photo, sub
-                }); // tento executar o services
-                return res.status(201).json({ message: 'Administrador criado com sucesso.' }); // sucesso ao criar algo
+                const response = yield finalizarSorteioServices.execute(id);
+                return res.status(200).json(response); //retorno um sucess
             }
             catch (error) {
-                return res.status(400).json({ error: error.message }); // erro do cliente
+                return res.status(400).json({ error: error.message });
+                ; //retorno o erro
             }
         });
     }
 }
-exports.CriarAdmController = CriarAdmController;
+exports.FinalizarSorteioController = FinalizarSorteioController;
