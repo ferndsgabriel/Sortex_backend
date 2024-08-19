@@ -45,7 +45,6 @@ class VerificarPagamento {
                 );
                 console.log('Nova rifa adicionada com sucesso');
             } else {
-                // Atualiza o status da rifa existente
                 if (status === 'approved') {
                     procurarSorteio.rifas[rifaIndex].status = status;
                 } else if (['cancelled', 'refunded', 'charged_back'].includes(status)) {
@@ -55,6 +54,10 @@ class VerificarPagamento {
                 await procurarSorteio.save();
                 console.log(`Rifa atualizada com sucesso, status: ${status}`);
             }
+
+            // Revalidate the document from the database after save
+            const updatedSorteio = await sorteioModel.findById<SorteioProps>(sorteioId).exec();
+            console.log('Documento atualizado:', updatedSorteio);
 
             res.status(200).json('Status da rifa atualizado com sucesso');
 
