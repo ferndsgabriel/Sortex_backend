@@ -33,31 +33,26 @@ class VerificarPagamento {
                 return res.status(400).json('Sorteio não encontrado');
             }
 
-            const rifaIndex = procurarSorteio.rifas.findIndex((rifa: Rifa) => rifa.id.toString() === id.toString());
+            let updatedRifas = [...procurarSorteio.rifas]; // Copia a lista atual de rifas
+
+            const rifaIndex = updatedRifas.findIndex((rifa: Rifa) => rifa.id.toString() === id.toString());
 
             if (rifaIndex === -1) {
                 const newRifa = { id, status, user };
-
-                await sorteioModel.findByIdAndUpdate(
-                    sorteioId,
-                    { $push: { rifas: newRifa } },
-                    { new: true }
-                );
+                updatedRifas.push(newRifa);
                 console.log('Nova rifa adicionada com sucesso');
             } else {
                 if (status === 'approved') {
-                    procurarSorteio.rifas[rifaIndex].status = status;
+                    updatedRifas[rifaIndex].status = status;
                 } else if (['cancelled', 'refunded', 'charged_back'].includes(status)) {
-                    procurarSorteio.rifas.splice(rifaIndex, 1);
+                    updatedRifas.splice(rifaIndex, 1); // Remove a rifa do array se o status for negativo
                 }
-
-                await procurarSorteio.save();
                 console.log(`Rifa atualizada com sucesso, status: ${status}`);
             }
 
-            // Revalidate the document from the database after save
-            const updatedSorteio = await sorteioModel.findById<SorteioProps>(sorteioId).exec();
-            console.log('Documento atualizado:', updatedSorteio);
+            // Atualiza a lista de rifas no banco de dados
+            procurarSorteio.rifas = updatedRifas;
+            await procurarSorteio.save();
 
             res.status(200).json('Status da rifa atualizado com sucesso');
 
