@@ -17,6 +17,7 @@ import { GerarLinkSallerController } from "./controllers/GerarLinkSallerControll
 import { ListProdutosAdmController } from "./controllers/ListProdutosAdmController";
 import { CriarSorteioController } from "./controllers/CriarSorteioController";
 import { GerarLinkPagamentoRifaController } from "./controllers/GerarLinkPagamentoRifaController";
+import { FinalizarSorteioController } from "./controllers/FinalizarSorteioController";
 
 //imports pagamento callback
 import { GetSaller } from "./mercadopago/getSaller";
@@ -60,10 +61,8 @@ routes.get('/', async (req: Request, res: Response) => {
     routes.get('/products', AdmMiddleware, new ListProdutosAdmController().handle);
     routes.post('/sortex', AdmMiddleware, new CriarSorteioController().handle);
     routes.post('/payment',  new GerarLinkPagamentoRifaController().handle);
-
+    routes.put('/finalizar', AdmMiddleware, new FinalizarSorteioController().handle);
     //pagamento callback
     routes.get('/sallercallback', new GetSaller().handle);
     routes.post('/paymentcallback', new VerificarPagamento().handle);
 
-
-    routes.get('/test,')

@@ -36,3 +36,6 @@ app.listen(port, ()=>{ // mandando nosso app escutar a porta
     console.log('Servidor ativo'); //se ele estiver ativo e tudo der certo, retorna que o servidor foi ativo 
 });
 
+routes.get('/test', async (req: Request, res: Response) => {
+    return res.send('Test endpoint working');
+});

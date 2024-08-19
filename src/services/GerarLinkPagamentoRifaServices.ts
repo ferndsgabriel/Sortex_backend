@@ -15,6 +15,7 @@ interface sorteioProps {
     title: string;
     admRef: string;
     price: number;
+    status:boolean
 }
 
 
@@ -34,6 +35,10 @@ class GerarLinkPagamentoRifaServices {
             throw new Error('Sorteio não encontrado.'); // se não achar o sorteio
         }
 
+        if (procurarSorteio.status === false){
+            throw new Error ("Este sorteio já se encerrou")
+        }
+
         const cardModel = mongoose.model('Cartaos', cardSchema); //crio um model de cards
 
         const procurarCard = await cardModel.findOne({ admRef: procurarSorteio.admRef }); // procuro o cartão
@@ -44,6 +49,7 @@ class GerarLinkPagamentoRifaServices {
 
         const descricao = `Pagamento da rifa: ${procurarSorteio.title}`; // obtenho a descrição do sorteio
         const preco = procurarSorteio.price; // o preço da rifa
+
         const accessToken: string | any = procurarCard.accessToken // access token para direcionar o pagamento
 
         // Chama a função processPayment com os parâmetros corretos
@@ -53,7 +59,7 @@ class GerarLinkPagamentoRifaServices {
             email:email,
             whatsapp:whatsapp
         }
-        const response = await  gerarLinkPagamento({accessToken: accessToken,
+        const response = await  gerarLinkPagamento({accessToken:'APP_USR-3875468438633898-081711-c309e7f4bcf3481cac8562b69a9869b4-247395576',
             amount: preco,
             description: descricao,
             user:user,
@@ -78,10 +84,8 @@ class GerarLinkPagamentoRifaServices {
             sorteioId, 
             { $push: { rifas:newPush } }, 
             { new: true } 
-        ).then((sucess)=>{
-            console.log('pagamento criado com sucesso');
-        }).catch((error)=>{
-            console.log(error)
+        ).catch((error)=>{
+            return (error);
         })
 
         return response;

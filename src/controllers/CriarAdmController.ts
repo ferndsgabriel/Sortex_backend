@@ -7,7 +7,7 @@ class CriarAdmController {
         const criarAdmServices = new CriarAdmServices(); // instancio o service
 
         try{
-            const criarAdm = await criarAdmServices.execute({
+            await criarAdmServices.execute({
                 name, email, photo, sub
             }); // tento executar o services
             return res.status(201).json({ message: 'Administrador criado com sucesso.' }); // sucesso ao criar algo
