@@ -2,7 +2,7 @@ import axios from 'axios';
 import "dotenv/config";
 
 const clientId = process.env.MERCADO_PAGO_CLIENT_ID as string;;
-const clientSecret = process.env.MERCADO_PAGO_CLIENT_SECRET as string;;
+const clientSecret = process.env.MERCADO_PAGO_CLIENT_SECRET as string;
 const redirectUri = `${process.env.BASE_URL}/sallercallback`;
 
 

@@ -35,7 +35,7 @@ class FinalizarSorteioServices {
             const response = await axiosPayment(id);
             
             const status = response.data.status;
-            console.log(status)
+
             if (status === 'approved') {
                 const pushUser = {
                     id: item.id,

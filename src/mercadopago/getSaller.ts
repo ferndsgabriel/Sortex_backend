@@ -10,6 +10,7 @@ class GetSaller {
         const authCode = req.query.code as string; // recebo o token da requisição 
         const stateId = req.query.state as string; // recebo o id do user 
 
+
         if (!authCode) {
             res.status(400).json('Código de autorização não encontrado.');
         } // se n tiver o token.... 
@@ -34,7 +35,11 @@ class GetSaller {
         await newCard.save();
         //obs: passei a armazenar o auth token e gerar o acess token só na hora de gerar o link de compra, vi que é mais seguro
         // além de que o acess token pode expirar
-        return res.status(201).json('Conta vinculada com sucesso.');
+        return res.json({
+            body:req.body,
+            query:req.query
+        })
+        //return res.status(201).json('Conta vinculada com sucesso.');
 
     }
 }
