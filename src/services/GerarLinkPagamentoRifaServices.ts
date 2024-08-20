@@ -71,7 +71,8 @@ class GerarLinkPagamentoRifaServices {
             email:email,
             whatsapp:whatsapp
         }
-        const response = await  gerarLinkPagamento({accessToken,
+        const response = await  gerarLinkPagamento({
+            accessToken,
             amount: preco,
             description: descricao,
             user:user,
