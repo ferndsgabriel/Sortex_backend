@@ -14,8 +14,10 @@ interface paymentProps{
 	sorteioId:string
 	qtd:number
 }
-
+	
 async function gerarLinkPagamento({accessToken, amount, description, user, method, sorteioId, qtd}:paymentProps){
+
+	//const aplicacaoAcessToken = process.env.MERCADO_PAG0_ACCESS_TOKEN as string;
 
 	const client = new MercadoPagoConfig({ accessToken:accessToken, options: { timeout: 5000} }); 
 
@@ -34,6 +36,7 @@ async function gerarLinkPagamento({accessToken, amount, description, user, metho
 			sorteioId: sorteioId,
 			user:user
 		},
+		
 	}; // corpo da função
 
 	

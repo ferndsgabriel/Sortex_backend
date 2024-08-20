@@ -62,7 +62,7 @@ class SortearProdutoServices{
                 email:embaralharRifas[randomIndex].user.email,
                 whatsapp:embaralharRifas[randomIndex].user.whatsapp,
             },
-            position:randomIndex
+            position:(randomIndex + 1)
         }
     }
 }
