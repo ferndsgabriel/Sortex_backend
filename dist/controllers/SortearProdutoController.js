@@ -9,24 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GerarLinkPagamentoRifaController = void 0;
-const GerarLinkPagamentoRifaServices_1 = require("../services/GerarLinkPagamentoRifaServices");
-class GerarLinkPagamentoRifaController {
+exports.SortearProdutoController = void 0;
+const SortearProdutoServices_1 = require("../services/SortearProdutoServices");
+class SortearProdutoController {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { sorteioId, metodoDePagamento, email, name, whatsapp, qtd } = req.body;
-            const gerarLinkPagamentoRifaServices = new GerarLinkPagamentoRifaServices_1.GerarLinkPagamentoRifaServices();
+            const { sorteioId } = req.body;
+            const sortearProdutoServices = new SortearProdutoServices_1.SortearProdutoServices();
             try {
-                const response = yield gerarLinkPagamentoRifaServices.execute({
-                    sorteioId, metodoDePagamento, email, name, whatsapp, qtd
-                });
-                return res.status(200).json(response);
+                const response = yield sortearProdutoServices.execute(sorteioId);
+                return res.status(200).json(response); //sucesso
             }
             catch (error) {
-                return res.status(400).json({ error: error.message });
-                ;
+                return res.status(400).json(error.message); //erro
             }
         });
     }
 }
-exports.GerarLinkPagamentoRifaController = GerarLinkPagamentoRifaController;
+exports.SortearProdutoController = SortearProdutoController;

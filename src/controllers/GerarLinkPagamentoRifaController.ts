@@ -4,13 +4,13 @@ import { GerarLinkPagamentoRifaServices } from "../services/GerarLinkPagamentoRi
 class GerarLinkPagamentoRifaController{
     async handle(req:Request, res:Response){
 
-        const {sorteioId, metodoDePagamento, email, name, whatsapp} = req.body;
+        const {sorteioId, metodoDePagamento, email, name, whatsapp, qtd} = req.body;
 
         const gerarLinkPagamentoRifaServices = new GerarLinkPagamentoRifaServices();
         
         try {
             const response = await gerarLinkPagamentoRifaServices.execute({
-                sorteioId, metodoDePagamento, email, name, whatsapp 
+                sorteioId, metodoDePagamento, email, name, whatsapp , qtd
             });
             
             return res.status(200).json(response);

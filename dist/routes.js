@@ -30,6 +30,7 @@ const ListProdutosAdmController_1 = require("./controllers/ListProdutosAdmContro
 const CriarSorteioController_1 = require("./controllers/CriarSorteioController");
 const GerarLinkPagamentoRifaController_1 = require("./controllers/GerarLinkPagamentoRifaController");
 const FinalizarSorteioController_1 = require("./controllers/FinalizarSorteioController");
+const SortearProdutoController_1 = require("./controllers/SortearProdutoController");
 //imports pagamento callback
 const getSaller_1 = require("./mercadopago/getSaller");
 const verificarPagamento_1 = require("./mercadopago/verificarPagamento");
@@ -70,6 +71,7 @@ exports.routes.get('/products', AdmMiddleware_1.default, new ListProdutosAdmCont
 exports.routes.post('/sortex', AdmMiddleware_1.default, new CriarSorteioController_1.CriarSorteioController().handle);
 exports.routes.post('/payment', new GerarLinkPagamentoRifaController_1.GerarLinkPagamentoRifaController().handle);
 exports.routes.put('/finalizar', AdmMiddleware_1.default, new FinalizarSorteioController_1.FinalizarSorteioController().handle);
+exports.routes.put('/sortear', AdmMiddleware_1.default, new SortearProdutoController_1.SortearProdutoController().handle);
 //pagamento callback
 exports.routes.get('/sallercallback', new getSaller_1.GetSaller().handle);
 exports.routes.post('/paymentcallback', new verificarPagamento_1.VerificarPagamento().handle);

@@ -12,11 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mercadopago_1 = require("mercadopago");
 const formats_1 = require("../utils/formats");
 function gerarLinkPagamento(_a) {
-    return __awaiter(this, arguments, void 0, function* ({ accessToken, amount, description, user, method, sorteioId }) {
+    return __awaiter(this, arguments, void 0, function* ({ accessToken, amount, description, user, method, sorteioId, qtd }) {
         const client = new mercadopago_1.MercadoPagoConfig({ accessToken: accessToken, options: { timeout: 5000 } });
         const payment = new mercadopago_1.Payment(client);
+        const total = (amount * qtd); // o valor vai ser o preço X a qtd de rifas compradas
         const body = {
-            transaction_amount: amount,
+            transaction_amount: total,
             description: description,
             payment_method_id: method,
             payer: {
@@ -26,7 +27,7 @@ function gerarLinkPagamento(_a) {
                 sorteioId: sorteioId,
                 user: user
             },
-        };
+        }; // corpo da função
         try {
             const sucess = yield payment.create({ body });
             const transactionData = sucess.point_of_interaction.transaction_data;

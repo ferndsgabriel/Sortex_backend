@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetSaller = void 0;
-const axiosSaller_1 = __importDefault(require("./axiosSaller"));
 const cartaoSchema_1 = require("../schemas/cartaoSchema");
 const mongoose_1 = __importDefault(require("mongoose"));
 class GetSaller {
@@ -28,22 +27,18 @@ class GetSaller {
             if (!stateId) {
                 res.status(400).json('Id não encontrado');
             } // se eu n receber o id...
-            const accessToken = yield (0, axiosSaller_1.default)(authCode).then();
-            //chamo o axios para gerar o acess token atraves do auth token
-            // esse acesssToken é o responsavel por poder enviar pagamentos a conta do adm
-            if (!accessToken) {
-                res.status(400).json('Erro ao vincular conta');
-            } // se eu n tenho um token...
             const cardModel = mongoose_1.default.model('Cartaos', cartaoSchema_1.cardSchema); // crio um model de card
             const obterModels = yield cardModel.find({ admRef: stateId }); // verifico se meu adm possui uma cartão
             if (obterModels.length > 0) {
                 res.status(400).json('Você já possui uma conta vinculada');
             } // se ele tiver...
             const newCard = new cardModel({
-                accessToken: accessToken,
+                authCode: authCode,
                 admRef: stateId
-            }); // crio um novo card no db
+            }); // crio um novo card no db e salvo o authCode
             yield newCard.save();
+            //obs: passei a armazenar o auth token e gerar o acess token só na hora de gerar o link de compra, vi que é mais seguro
+            // além de que o acess token pode expirar
             return res.status(201).json('Conta vinculada com sucesso.');
         });
     }

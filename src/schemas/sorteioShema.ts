@@ -40,7 +40,12 @@ export const sorteioSchema: Schema = new Schema({
     status:{
         type:Boolean,
         required:true,
-        default:false
+        default:false // indica que não pode mais receber pagamentos
+    },
+    drawn:{
+        type:Boolean,
+        required:true,
+        default:false  // indica que o premio já tem um vencedor e não pode mais gerar outro vencedor 
     },
     winner:{
         type:Number,

@@ -19,14 +19,6 @@ class GetSaller {
             res.status(400).json('Id não encontrado');
         } // se eu n receber o id...
 
-        const accessToken =  await axiosSaller(authCode).then(); 
-        //chamo o axios para gerar o acess token atraves do auth token
-        // esse acesssToken é o responsavel por poder enviar pagamentos a conta do adm
-        
-        if (!accessToken){
-            res.status(400).json('Erro ao vincular conta');
-        } // se eu n tenho um token...
-
         const cardModel = mongoose.model('Cartaos', cardSchema); // crio um model de card
 
         const obterModels = await cardModel.find({admRef:stateId}); // verifico se meu adm possui uma cartão
@@ -36,12 +28,13 @@ class GetSaller {
         } // se ele tiver...
         
         const newCard = new cardModel({
-            accessToken:accessToken,
+            authCode:authCode,
             admRef:stateId
-        }); // crio um novo card no db
+        }); // crio um novo card no db e salvo o authCode
 
         await newCard.save();
-
+        //obs: passei a armazenar o auth token e gerar o acess token só na hora de gerar o link de compra, vi que é mais seguro
+        // além de que o acess token pode expirar
         return res.status(201).json('Conta vinculada com sucesso.');
 
     }

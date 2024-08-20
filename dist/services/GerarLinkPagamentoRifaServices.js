@@ -17,10 +17,11 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const gerarLinkPagamento_1 = __importDefault(require("../mercadopago/gerarLinkPagamento"));
 const sorteioShema_1 = require("../schemas/sorteioShema");
 const cartaoSchema_1 = require("../schemas/cartaoSchema");
+const axiosSaller_1 = __importDefault(require("../mercadopago/axiosSaller"));
 class GerarLinkPagamentoRifaServices {
     execute(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ sorteioId, metodoDePagamento, email, name, whatsapp }) {
-            if (!sorteioId || !metodoDePagamento || !email || !name || !whatsapp) {
+        return __awaiter(this, arguments, void 0, function* ({ sorteioId, metodoDePagamento, email, name, whatsapp, qtd }) {
+            if (!sorteioId || !metodoDePagamento || !email || !name || !whatsapp || qtd <= 0) {
                 throw new Error('Preencha todos os campos'); // garantir que o user vai enviar todos os dados
             }
             const sorteioModel = mongoose_1.default.model('Sorteios', sorteioShema_1.sorteioSchema); //crio um model de sorteio
@@ -30,30 +31,42 @@ class GerarLinkPagamentoRifaServices {
             }
             if (procurarSorteio.status === false) {
                 throw new Error("Este sorteio já se encerrou");
-            }
+            } // se o status estiver como false, significa que o sorteio já encerrou
             const cardModel = mongoose_1.default.model('Cartaos', cartaoSchema_1.cardSchema); //crio um model de cards
             const procurarCard = yield cardModel.findOne({ admRef: procurarSorteio.admRef }); // procuro o cartão
             if (!procurarCard) {
                 throw new Error('Cartão não encontrado'); // se não achar
             }
+            if (qtd < 1) {
+                throw new Error("Digite uma quantidade maior que zero");
+            } // a qtd de rifas precisa ser maior que 0
             const descricao = `Pagamento da rifa: ${procurarSorteio.title}`; // obtenho a descrição do sorteio
             const preco = procurarSorteio.price; // o preço da rifa
-            const accessToken = procurarCard.accessToken; // access token para direcionar o pagamento
-            // Chama a função processPayment com os parâmetros corretos
+            const authCode = procurarCard.authCode.toString(); // access token para direcionar o pagamento
+            const accessToken = yield (0, axiosSaller_1.default)(authCode).then();
+            //chamo o axios para gerar o acess token atraves do auth token
+            // esse acesssToken é o responsavel por poder enviar pagamentos a conta do adm
+            if (!accessToken) {
+                throw new Error('Erro ao vincular conta de cobranças');
+            } // se eu n tenho um token...
             const user = {
                 name: name,
                 email: email,
                 whatsapp: whatsapp
             };
-            const response = yield (0, gerarLinkPagamento_1.default)({ accessToken: 'APP_USR-3875468438633898-081711-c309e7f4bcf3481cac8562b69a9869b4-247395576',
+            const response = yield (0, gerarLinkPagamento_1.default)({ accessToken,
                 amount: preco,
                 description: descricao,
                 user: user,
                 method: metodoDePagamento,
-                sorteioId: sorteioId
-            });
-            const id = response.id;
-            const status = response.status;
+                sorteioId: sorteioId,
+                qtd: qtd
+            }); // gero link de pagamento enviando os dados necessarios
+            const id = response.id; // obtenho o id da transação 
+            const status = response.status; // status da transação
+            if (!id || !status) {
+                throw new Error("Erro ao gerar link de pagamento");
+            } // se n tiver id ou status, retorno um erro
             const newPush = {
                 id: id,
                 status: status,
@@ -62,11 +75,14 @@ class GerarLinkPagamentoRifaServices {
                     whatsapp: whatsapp,
                     name: name
                 }
-            };
-            yield sorteioModel.findByIdAndUpdate(sorteioId, { $push: { rifas: newPush } }, { new: true }).catch((error) => {
-                return (error);
-            });
-            return response;
+            }; // formato como os arquivos vão ser enviados;
+            for (let x = 0; x < qtd; x++) {
+                yield sorteioModel.findByIdAndUpdate(sorteioId, { $push: { rifas: newPush } }, { new: true }).catch((error) => {
+                    return (error);
+                });
+            }
+            ; // faço um loop para gerar no db a qtd de rifas que ele comprou 
+            return response; // retorno o link
         });
     }
 }

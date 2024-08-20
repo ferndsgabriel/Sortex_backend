@@ -12,16 +12,19 @@ interface paymentProps{
 		whatsapp:string
 	};
 	sorteioId:string
+	qtd:number
 }
 
-async function gerarLinkPagamento({accessToken, amount, description, user, method, sorteioId}:paymentProps){
+async function gerarLinkPagamento({accessToken, amount, description, user, method, sorteioId, qtd}:paymentProps){
 
-	const client = new MercadoPagoConfig({ accessToken:accessToken, options: { timeout: 5000} });
+	const client = new MercadoPagoConfig({ accessToken:accessToken, options: { timeout: 5000} }); 
 
 	const payment = new Payment(client);
 
+	const total = (amount * qtd); // o valor vai ser o preço X a qtd de rifas compradas
+	
 	const body = {
-		transaction_amount: amount,
+		transaction_amount: total,
 		description: description,
 		payment_method_id: method,
 		payer: {
@@ -31,8 +34,9 @@ async function gerarLinkPagamento({accessToken, amount, description, user, metho
 			sorteioId: sorteioId,
 			user:user
 		},
-	};
+	}; // corpo da função
 
+	
     try {
         const sucess = await payment.create({ body });
         const transactionData = sucess.point_of_interaction.transaction_data;
