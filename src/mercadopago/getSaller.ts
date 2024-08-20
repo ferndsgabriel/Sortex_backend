@@ -7,7 +7,7 @@ class GetSaller {
     async handle(req: Request, res: Response) {
 
         // essa função está vinculado a rota sallercallback, que é o redirect do adm após logar em sua conta do mp para poder receber os pagamentos
-        
+        console.log('fui chamada')
         const authCode = req.query.code as string; // recebo o token da requisição 
         const stateId = req.query.state as string; // recebo o id do user 
 
