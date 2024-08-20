@@ -12,7 +12,7 @@ const axiosSaller = async (authCode: string) => {
             client_id: clientId,
             client_secret: clientSecret,
             code: authCode,
-            grant_type: 'client_credentials',  
+            grant_type: 'authorization_code',  
             redirect_uri: redirectUri
         }, {
             headers: {
