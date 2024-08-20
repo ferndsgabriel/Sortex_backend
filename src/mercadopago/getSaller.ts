@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import axiosSaller from './axiosSaller';
 import { cardSchema } from '../schemas/cartaoSchema';
 import mongoose from 'mongoose';
 

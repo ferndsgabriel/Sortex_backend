@@ -18,6 +18,7 @@ interface sorteioProps {
     admRef: string;
     price: number;
     status:boolean,
+    drawn:boolean
 }
 
 
@@ -38,8 +39,12 @@ class GerarLinkPagamentoRifaServices {
         }
 
         if (procurarSorteio.status === false){
-            throw new Error ("Este sorteio já se encerrou")
-        } // se o status estiver como false, significa que o sorteio já encerrou
+            throw new Error ("Venda de rifas encerrada");
+        } // se o status estiver como false, significa que as rifas já encerraram 
+        
+        if (procurarSorteio.drawn === false){
+            throw new Error ("Sorteio encerrado");
+        } // se o drawn estiver como false, significa que o sorteio já encerrou
 
         const cardModel = mongoose.model('Cartaos', cardSchema); //crio um model de cards
 

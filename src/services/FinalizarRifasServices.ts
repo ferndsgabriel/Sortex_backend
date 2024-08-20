@@ -14,7 +14,7 @@ interface sorteioProps {
     }]
 }
 
-class FinalizarSorteioServices {
+class FinalizarRifasServices {
     async execute(id: Types.ObjectId) {
 
         if (!id){
@@ -59,4 +59,4 @@ class FinalizarSorteioServices {
     }
 }
 
-export { FinalizarSorteioServices }
+export { FinalizarRifasServices }
