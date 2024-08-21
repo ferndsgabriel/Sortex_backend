@@ -90,7 +90,7 @@ class GerarLinkPagamentoRifaServices {
         const status = response.status; // status da transação
 
         if (!id || !status){
-            throw new Error ("Erro ao gerar link de pagamento");
+            throw new Error ("Erro ao gerar link de pagamento, envie todos os dados.");
         } // se n tiver id ou status, retorno um erro
 
         const newPush = {
