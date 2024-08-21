@@ -6,7 +6,6 @@ import AtualizarAcessToken from "../mercadopago/atualizarAcessToken";
 
 interface pagamentoProps {
     sorteioId: string;
-    metodoDePagamento: string;
     email: string;
     name: string;
     whatsapp: string;
@@ -22,9 +21,9 @@ interface sorteioProps {
 }
 
 class GerarLinkPagamentoRifaServices {
-    async execute({ sorteioId, metodoDePagamento, email, name, whatsapp, qtd }: pagamentoProps) {
+    async execute({ sorteioId, email, name, whatsapp, qtd }: pagamentoProps) {
         
-        if (!sorteioId || !metodoDePagamento || !email || !name || !whatsapp || qtd <= 0) {
+        if (!sorteioId || !email || !name || !whatsapp || qtd <= 0) {
             throw new Error('Preencha todos os campos');
         } // verifico se estou recebendo todos os parametros
 
@@ -66,7 +65,6 @@ class GerarLinkPagamentoRifaServices {
                 amount: preco,
                 description: descricao,
                 user: { name, email, whatsapp },
-                method: metodoDePagamento,
                 sorteioId,
                 qtd
             }); // primeiro, tento obter a resposta usando os dados atuais, se n consigo...
@@ -91,7 +89,6 @@ class GerarLinkPagamentoRifaServices {
                         amount: preco,
                         description: descricao,
                         user: { name, email, whatsapp },
-                        method: metodoDePagamento,
                         sorteioId,
                         qtd
                     }); // agora tento gerar um novo link através desse novo acess token
@@ -126,7 +123,7 @@ class GerarLinkPagamentoRifaServices {
             }); // faço um for para adicionar a rifa a qtd de rifas compradas
         }
 
-        return response; // retorno a resposta 
+        return response; // retorno a resposta
     }
 }
 

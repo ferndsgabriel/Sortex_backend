@@ -1,9 +1,9 @@
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { formatEmail } from '../utils/formats';
+import axios from 'axios';
 
 interface paymentProps{
 	accessToken:string;
-	method:string;
 	amount:number;
 	description:string;
 	user:{
@@ -15,7 +15,7 @@ interface paymentProps{
 	qtd:number
 }
 	
-async function ObterLinkPagamento({accessToken, amount, description, user, method, sorteioId, qtd}:paymentProps){
+async function ObterLinkPagamento({accessToken, amount, description, user,  sorteioId, qtd}:paymentProps){
 
 	const aplicacaoAcessToken = process.env.MERCADO_PAG0_ACCESS_TOKEN as string; // vou usar para poder dividir o pagamento
 
@@ -28,9 +28,12 @@ async function ObterLinkPagamento({accessToken, amount, description, user, metho
 	const body = {
 		transaction_amount: total,
 		description: description,
-		payment_method_id: method,
+		payment_method_id: 'pix',
+		token:accessToken,
 		payer: {
 			email: formatEmail(user.email),
+			first_name: user.name.split(' ')[0], // Assume o primeiro nome
+			last_name: user.name.split(' ')[1] 
 		},
 		metadata: {
 			sorteioId: sorteioId,
@@ -51,6 +54,7 @@ async function ObterLinkPagamento({accessToken, amount, description, user, metho
             statusDetail: sucess.status_detail 
         };
     } catch (error) {
+		console.log(error)
         throw (error.code);
     }
 }
