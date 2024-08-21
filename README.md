@@ -8,28 +8,6 @@ Sortex is a project designed for managing raffles and giveaways. Users can regis
 <img src='https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white' alt='TS'/>
 <img src='https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white' alt='MongoDB'/>    
 
-
-## Setup
-
-```bash
-# Clone the project
-$ git clone https://github.com/ferndsgabriel/Sortex_backend.git
-
-# Install dependencies
-$ yarn install
-
-# If using npm, install dependencies
-$ npm install
-
-# Start project
-$ yarn dev
-
-# If using npm, start project
-$ npm run dev
-```
-
-=======
-
 ## Setup
 
 ```bash
