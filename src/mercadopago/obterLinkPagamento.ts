@@ -15,7 +15,7 @@ interface paymentProps{
 	qtd:number
 }
 	
-async function gerarLinkPagamento({accessToken, amount, description, user, method, sorteioId, qtd}:paymentProps){
+async function ObterLinkPagamento({accessToken, amount, description, user, method, sorteioId, qtd}:paymentProps){
 
 	const aplicacaoAcessToken = process.env.MERCADO_PAG0_ACCESS_TOKEN as string; // vou usar para poder dividir o pagamento
 
@@ -51,9 +51,8 @@ async function gerarLinkPagamento({accessToken, amount, description, user, metho
             statusDetail: sucess.status_detail 
         };
     } catch (error) {
-        console.log(error);
-        throw new Error('Erro ao gerar link de pagamento');
+        throw (error.code);
     }
 }
 
-export default gerarLinkPagamento;
+export default ObterLinkPagamento;

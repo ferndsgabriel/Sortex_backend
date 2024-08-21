@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetSaller = void 0;
+exports.ObterContaVendedor = void 0;
 const cartaoSchema_1 = require("../schemas/cartaoSchema");
 const mongoose_1 = __importDefault(require("mongoose"));
-class GetSaller {
+const axiosAcessToken_1 = __importDefault(require("./axiosAcessToken"));
+class ObterContaVendedor {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             // essa função está vinculado a rota sallercallback, que é o redirect do adm após logar em sua conta do mp para poder receber os pagamentos
@@ -27,24 +28,24 @@ class GetSaller {
             if (!stateId) {
                 res.status(400).json('Id não encontrado');
             } // se eu n receber o id...
+            const obterAcessToken = yield (0, axiosAcessToken_1.default)(authCode).catch(() => {
+                res.status(400).json('Erro ao obter acess token');
+            });
+            const accessToken = obterAcessToken.access_token; // pego o acess token da responsa do axios
+            const refreshToken = obterAcessToken.refresh_token; // pego o refresh token tbm
             const cardModel = mongoose_1.default.model('Cartaos', cartaoSchema_1.cardSchema); // crio um model de card
             const obterModels = yield cardModel.find({ admRef: stateId }); // verifico se meu adm possui uma cartão
             if (obterModels.length > 0) {
                 res.status(400).json('Você já possui uma conta vinculada');
             } // se ele tiver...
             const newCard = new cardModel({
-                authCode: authCode,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
                 admRef: stateId
-            }); // crio um novo card no db e salvo o authCode
+            }); // crio um novo card no db e salvo o refresh token e o acess token
             yield newCard.save();
-            //obs: passei a armazenar o auth token e gerar o acess token só na hora de gerar o link de compra, vi que é mais seguro
-            // além de que o acess token pode expirar
-            return res.json({
-                body: req.body,
-                query: req.query
-            });
-            //return res.status(201).json('Conta vinculada com sucesso.');
+            return res.status(201).json('Conta vinculada com sucesso.');
         });
     }
 }
-exports.GetSaller = GetSaller;
+exports.ObterContaVendedor = ObterContaVendedor;

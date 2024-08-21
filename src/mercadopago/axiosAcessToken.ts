@@ -6,7 +6,7 @@ const clientSecret = process.env.MERCADO_PAGO_CLIENT_SECRET as string;
 const redirectUri = `${process.env.BASE_URL}/sallercallback`;
 
 
-const axiosSaller = async (authCode: string) => {
+const AxiosAcessToken = async (authCode: string) => {
     try {
         const response = await axios.post('https://api.mercadopago.com/oauth/token', {
             client_id: clientId,
@@ -19,8 +19,7 @@ const axiosSaller = async (authCode: string) => {
                 'Content-Type': 'application/json'
             }
         });
-        const accessToken = response.data.access_token;
-        return accessToken;
+        return response.data;
     } catch (error) {
         console.error('Error getting access token:', error.response ? error.response.data : error.message);
         throw error;
@@ -28,4 +27,4 @@ const axiosSaller = async (authCode: string) => {
 };
 
 
-export default axiosSaller
+export default AxiosAcessToken

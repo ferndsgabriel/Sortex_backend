@@ -41,12 +41,12 @@ exports.sorteioSchema = new mongoose_1.Schema({
     status: {
         type: Boolean,
         required: true,
-        default: false // indica que não pode mais receber pagamentos
+        default: true // indica que não pode mais receber pagamentos
     },
     drawn: {
         type: Boolean,
         required: true,
-        default: false // indica que o premio já tem um vencedor e não pode mais gerar outro vencedor 
+        default: true // indica que o premio já tem um vencedor e não pode mais gerar outro vencedor 
     },
     winner: {
         type: Number,

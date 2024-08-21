@@ -1,6 +1,6 @@
 import mongoose, { Types } from "mongoose";
 import { sorteioSchema } from "../schemas/sorteioShema";
-import axiosPayment from "../mercadopago/axiosPayment";
+import AxiosVerificarPagameto from "../mercadopago/axiosVerificarPagameto";
 
 interface sorteioProps {
     rifas: [{
@@ -32,7 +32,7 @@ class FinalizarRifasServices {
 
         const analisar = procurarSorteio.rifas.map(async (item) => {
             const id = item.id.toString();
-            const response = await axiosPayment(id);
+            const response = await AxiosVerificarPagameto(id);
             
             const status = response.data.status;
 

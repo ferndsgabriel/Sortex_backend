@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { cardSchema } from '../schemas/cartaoSchema';
 import mongoose from 'mongoose';
+import AxiosAcessToken from './axiosAcessToken';
 
-class GetSaller {
+class ObterContaVendedor {
     async handle(req: Request, res: Response) {
 
         // essa função está vinculado a rota sallercallback, que é o redirect do adm após logar em sua conta do mp para poder receber os pagamentos
@@ -18,6 +19,13 @@ class GetSaller {
             res.status(400).json('Id não encontrado');
         } // se eu n receber o id...
 
+        const obterAcessToken = await AxiosAcessToken(authCode).catch(()=>{
+            res.status(400).json('Erro ao obter acess token')
+        })
+        
+        const accessToken = obterAcessToken.access_token; // pego o acess token da responsa do axios
+        const refreshToken = obterAcessToken.refresh_token; // pego o refresh token tbm
+
         const cardModel = mongoose.model('Cartaos', cardSchema); // crio um model de card
 
         const obterModels = await cardModel.find({admRef:stateId}); // verifico se meu adm possui uma cartão
@@ -27,20 +35,16 @@ class GetSaller {
         } // se ele tiver...
         
         const newCard = new cardModel({
-            authCode:authCode,
+            accessToken:accessToken,
+            refreshToken:refreshToken,
             admRef:stateId
-        }); // crio um novo card no db e salvo o authCode
+        }); // crio um novo card no db e salvo o refresh token e o acess token
 
         await newCard.save();
-        //obs: passei a armazenar o auth token e gerar o acess token só na hora de gerar o link de compra, vi que é mais seguro
-        // além de que o acess token pode expirar
-        return res.json({
-            body:req.body,
-            query:req.query
-        })
-        //return res.status(201).json('Conta vinculada com sucesso.');
+
+        return res.status(201).json('Conta vinculada com sucesso.');
 
     }
 }
 
-export { GetSaller };
+export { ObterContaVendedor };

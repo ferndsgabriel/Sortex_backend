@@ -14,29 +14,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 require("dotenv/config");
-const clientId = process.env.MERCADO_PAGO_CLIENT_ID;
-;
-const clientSecret = process.env.MERCADO_PAGO_CLIENT_SECRET;
-const redirectUri = `${process.env.BASE_URL}/sallercallback`;
-const axiosSaller = (authCode) => __awaiter(void 0, void 0, void 0, function* () {
+const accessToken = process.env.MERCADO_PAG0_ACCESS_TOKEN;
+const AxiosVerificarPagameto = (paymentId) => __awaiter(void 0, void 0, void 0, function* () {
+    const url = `https://api.mercadopago.com/v1/payments/${paymentId}`;
     try {
-        const response = yield axios_1.default.post('https://api.mercadopago.com/oauth/token', {
-            client_id: clientId,
-            client_secret: clientSecret,
-            code: authCode,
-            grant_type: 'authorization_code',
-            redirect_uri: redirectUri
-        }, {
+        const response = yield axios_1.default.get(url, {
             headers: {
-                'Content-Type': 'application/json'
+                'Authorization': `Bearer ${accessToken}`
             }
         });
-        const accessToken = response.data.access_token;
-        return accessToken;
+        return response;
     }
     catch (error) {
-        console.error('Error getting access token:', error.response ? error.response.data : error.message);
+        console.error(error.message);
         throw error;
     }
 });
-exports.default = axiosSaller;
+exports.default = AxiosVerificarPagameto;

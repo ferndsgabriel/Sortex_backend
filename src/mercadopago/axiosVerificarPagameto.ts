@@ -3,7 +3,7 @@ import "dotenv/config";
 
 const accessToken = process.env.MERCADO_PAG0_ACCESS_TOKEN;
 
-const axiosPayment = async (paymentId: string) => {
+const AxiosVerificarPagameto = async (paymentId: string) => {
     const url = `https://api.mercadopago.com/v1/payments/${paymentId}`;
     try {
         const response = await axios.get(url, {
@@ -18,4 +18,4 @@ const axiosPayment = async (paymentId: string) => {
     }
 };
 
-export default axiosPayment;
+export default AxiosVerificarPagameto;

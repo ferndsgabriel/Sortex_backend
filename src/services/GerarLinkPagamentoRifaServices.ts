@@ -1,122 +1,133 @@
-import mongoose, { Types } from "mongoose"
-import gerarLinkPagamento from "../mercadopago/gerarLinkPagamento";
+import mongoose from "mongoose";
+import ObterLinkPagamento from "../mercadopago/obterLinkPagamento";
 import { sorteioSchema } from "../schemas/sorteioShema";
 import { cardSchema } from "../schemas/cartaoSchema";
-import axiosSaller from "../mercadopago/axiosSaller";
+import AtualizarAcessToken from "../mercadopago/atualizarAcessToken";
 
-interface pagamentoProps{
+interface pagamentoProps {
     sorteioId: string;
     metodoDePagamento: string;
     email: string;
     name: string;
     whatsapp: string;
-    qtd:number
+    qtd: number;
 }
 
 interface sorteioProps {
     title: string;
     admRef: string;
     price: number;
-    status:boolean,
-    drawn:boolean
+    status: boolean;
+    drawn: boolean;
 }
-
 
 class GerarLinkPagamentoRifaServices {
-
     async execute({ sorteioId, metodoDePagamento, email, name, whatsapp, qtd }: pagamentoProps) {
-
+        
         if (!sorteioId || !metodoDePagamento || !email || !name || !whatsapp || qtd <= 0) {
-            throw new Error('Preencha todos os campos'); // garantir que o user vai enviar todos os dados
-        }
+            throw new Error('Preencha todos os campos');
+        } // verifico se estou recebendo todos os parametros
 
-        const sorteioModel = mongoose.model('Sorteios', sorteioSchema); //crio um model de sorteio
-
-        const procurarSorteio: sorteioProps = await sorteioModel.findById(sorteioId); // procuro o sorteio 
+        const sorteioModel = mongoose.model('Sorteios', sorteioSchema); // crio uma model de sorteios
+        const procurarSorteio: sorteioProps = await sorteioModel.findById(sorteioId); // procuro o sorteio pelo id
 
         if (!procurarSorteio) {
-            throw new Error('Sorteio não encontrado.'); // se não achar o sorteio
-        }
+            throw new Error('Sorteio não encontrado.');
+        } // se eu n encontrar
 
-        if (procurarSorteio.drawn === false){
-            throw new Error ("Sorteio encerrado");
-        } // se o drawn estiver como false, significa que o sorteio já encerrou
+        if (procurarSorteio.drawn === false) {
+            throw new Error("Sorteio encerrado");
+        } // se o sorteio já estiver encerrado, não posso mais pagar
 
-        if (procurarSorteio.status === false){
-            throw new Error ("Venda de rifas encerrada");
-        } // se o status estiver como false, significa que as rifas já encerraram 
+        if (procurarSorteio.status === false) {
+            throw new Error("Venda de rifas encerrada");
+        } // se a venda de rifas já estiver encerradas
 
-        const cardModel = mongoose.model('Cartaos', cardSchema); //crio um model de cards
-
-        const procurarCard = await cardModel.findOne({ admRef: procurarSorteio.admRef }); // procuro o cartão
+        const cardModel = mongoose.model('Cartaos', cardSchema); // crio um model de cards
+        const procurarCard = await cardModel.findOne({ admRef: procurarSorteio.admRef }); // procuro qual deles possui o id do adm
+        // que está vinculado aquele sorteio
 
         if (!procurarCard) {
-            throw new Error('Cartão não encontrado'); // se não achar
-        } 
+            throw new Error('Cartão não encontrado');
+        } // se n acho nenhum card
 
-        if (qtd < 1 ){
-            throw new Error ("Digite uma quantidade maior que zero")
-        } // a qtd de rifas precisa ser maior que 0
 
-        const descricao = `Pagamento da rifa: ${procurarSorteio.title}`; // obtenho a descrição do sorteio
-        const preco = procurarSorteio.price; // o preço da rifa
+        const descricao = `Pagamento da rifa: ${procurarSorteio.title}; Quantidades: ${qtd}`; // pego uma descrição para colocar no pagamento
+        const preco = procurarSorteio.price; // pego p preco da rifa para colocar no pagamento
 
-        const authCode = procurarCard.authCode.toString(); // access token para direcionar o pagamento
+        const accessToken = procurarCard.accessToken.toString(); // pego o acess token do card
+        const refreshToken = procurarCard.refreshToken.toString(); // pego o refresh token tbm, talvez possa ser usado
 
-        const accessToken =  await axiosSaller(authCode).then(); 
-        //chamo o axios para gerar o acess token atraves do auth token
-        // esse acesssToken é o responsavel por poder enviar pagamentos a conta do adm
-        
-        if (!accessToken){
-            throw new Error('Erro ao vincular conta de cobranças');
-        } // se eu n tenho um token...
+        let response; // crio um let de response, pois pode sofrer alterações
 
-        const user = {
-            name:name,
-            email:email,
-            whatsapp:whatsapp
+        try {
+            response = await ObterLinkPagamento({
+                accessToken:accessToken,
+                amount: preco,
+                description: descricao,
+                user: { name, email, whatsapp },
+                method: metodoDePagamento,
+                sorteioId,
+                qtd
+            }); // primeiro, tento obter a resposta usando os dados atuais, se n consigo...
+        } catch (error) {
+            if (error === 'unauthorized') {  //se n conseguir pode ser o acess token desatualizado...
+                try { 
+                    const refreshResponse: any = await AtualizarAcessToken(refreshToken, accessToken );// se for isso, chamo a função de atualizar o acess token
+                    const newAccessToken = refreshResponse.accesstoken; // obtenho o novo acessToken
+                    const newRefreshToken = refreshResponse.refreshToken; // o novo refresh
+
+                    if (newAccessToken && newAccessToken){ // verifico se estou de fato recebendo os novos tokens
+                        await cardModel.updateOne(
+                            { admRef: procurarSorteio.admRef, accessToken:accessToken},
+                            { $set: { accessToken:newAccessToken, refreshToken: newRefreshToken } }
+                        ); // atualizo no db
+                    }else{
+                        throw new Error ('Erro ao atualizar acess token'); // se n recebo esses novos acess token, retorno um erro
+                    }
+
+                    response = await ObterLinkPagamento({
+                        accessToken:newAccessToken,
+                        amount: preco,
+                        description: descricao,
+                        user: { name, email, whatsapp },
+                        method: metodoDePagamento,
+                        sorteioId,
+                        qtd
+                    }); // agora tento gerar um novo link através desse novo acess token
+                } catch (refreshError) {
+                    throw new Error(refreshError);
+                }
+            } else {
+                throw new Error('Erro ao gerar link de pagamento');
+                // se n for isso é outro erro de pagamento
+            }
         }
-        const response = await  gerarLinkPagamento({
-            accessToken,
-            amount: preco,
-            description: descricao,
-            user:user,
-            method: metodoDePagamento,
-            sorteioId:sorteioId,
-            qtd:qtd
-        }); // gero link de pagamento enviando os dados necessarios
 
-        const id = response.id; // obtenho o id da transação 
-        const status = response.status; // status da transação
+        const { id, status } = response; // pego o id do pagamento e o status na responsa do tokken
 
-        if (!id || !status){
-            throw new Error ("Erro ao gerar link de pagamento, envie todos os dados.");
-        } // se n tiver id ou status, retorno um erro
+        if (!id || !status) {
+            throw new Error("Erro ao gerar link de pagamento, envie todos os dados.");
+        } // verifico se realmente pego esses dados
 
         const newPush = {
-            id:id,
-            status:status,
-            user:{
-                email:email,
-                whatsapp:whatsapp,
-                name:name  
-            }
-        } // formato como os arquivos vão ser enviados;
-        
-        for (let x = 0; x < qtd; x++){
+            id,
+            status,
+            user: { email, whatsapp, name }
+        }; // crio um obj com informações do user e do pagamento
+
+        for (let x = 0; x < qtd; x++) {
             await sorteioModel.findByIdAndUpdate(
-                sorteioId, 
-                { $push: { rifas:newPush } }, 
-                { new: true } 
-            ).catch((error)=>{
-                return (error);
-            })
-        }; // faço um loop para gerar no db a qtd de rifas que ele comprou 
+                sorteioId,
+                { $push: { rifas: newPush } },
+                { new: true }
+            ).catch((error) => {
+                throw new Error('Erro ao atualizar rifas no banco de dados');
+            }); // faço um for para adicionar a rifa a qtd de rifas compradas
+        }
 
-
-        return response; // retorno o link
+        return response; // retorno a resposta 
     }
-
 }
 
-export { GerarLinkPagamentoRifaServices }
+export { GerarLinkPagamentoRifaServices };

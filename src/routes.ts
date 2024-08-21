@@ -21,9 +21,11 @@ import { FinalizarRifasController } from "./controllers/FinalizarRifasController
 import { SortearProdutoController } from "./controllers/SortearProdutoController";
 import { EncerrarSorteioController } from "./controllers/EncerrarSorteioController";
 
+import AtualizarAcessToken from "./mercadopago/atualizarAcessToken";
+
 //imports pagamento callback
-import { GetSaller } from "./mercadopago/getSaller";
-import { VerificarPagamento } from "./mercadopago/verificarPagamento";
+import { ObterContaVendedor } from "./mercadopago/obterContaVendedor";
+import { RespostasPagamento } from "./mercadopago/respostasPagamento";
 
 const Multer = multer({ storage: multer.memoryStorage() }); // multer para upload de arquivos
 
@@ -67,6 +69,5 @@ routes.get('/', async (req: Request, res: Response) => {
     routes.put('/sortear', AdmMiddleware, new SortearProdutoController().handle);
     routes.put('/finalizarsorteio', AdmMiddleware, new EncerrarSorteioController().handle);
     //pagamento callback
-    routes.get('/sallercallback', new GetSaller().handle);
-    routes.post('/paymentcallback', new VerificarPagamento().handle);
-
+    routes.get('/sallercallback', new ObterContaVendedor().handle);
+    routes.post('/paymentcallback', new RespostasPagamento().handle);

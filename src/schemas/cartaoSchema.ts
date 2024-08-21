@@ -2,7 +2,11 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export const cardSchema: Schema = new Schema({
     
-    authCode: {
+    accessToken: {
+        type: String,
+        required: true,
+    },
+    refreshToken:{
         type: String,
         required: true,
     },

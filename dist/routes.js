@@ -29,11 +29,12 @@ const GerarLinkSallerController_1 = require("./controllers/GerarLinkSallerContro
 const ListProdutosAdmController_1 = require("./controllers/ListProdutosAdmController");
 const CriarSorteioController_1 = require("./controllers/CriarSorteioController");
 const GerarLinkPagamentoRifaController_1 = require("./controllers/GerarLinkPagamentoRifaController");
-const FinalizarSorteioController_1 = require("./controllers/FinalizarSorteioController");
+const FinalizarRifasController_1 = require("./controllers/FinalizarRifasController");
 const SortearProdutoController_1 = require("./controllers/SortearProdutoController");
+const EncerrarSorteioController_1 = require("./controllers/EncerrarSorteioController");
 //imports pagamento callback
-const getSaller_1 = require("./mercadopago/getSaller");
-const verificarPagamento_1 = require("./mercadopago/verificarPagamento");
+const obterContaVendedor_1 = require("./mercadopago/obterContaVendedor");
+const respostasPagamento_1 = require("./mercadopago/respostasPagamento");
 const Multer = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() }); // multer para upload de arquivos
 exports.routes = (0, express_1.Router)(); // importando para poder utilizar no App;
 // criando as rotas
@@ -70,8 +71,9 @@ exports.routes.get('/linksaller', AdmMiddleware_1.default, new GerarLinkSallerCo
 exports.routes.get('/products', AdmMiddleware_1.default, new ListProdutosAdmController_1.ListProdutosAdmController().handle);
 exports.routes.post('/sortex', AdmMiddleware_1.default, new CriarSorteioController_1.CriarSorteioController().handle);
 exports.routes.post('/payment', new GerarLinkPagamentoRifaController_1.GerarLinkPagamentoRifaController().handle);
-exports.routes.put('/finalizar', AdmMiddleware_1.default, new FinalizarSorteioController_1.FinalizarSorteioController().handle);
+exports.routes.put('/finalizarrifas', AdmMiddleware_1.default, new FinalizarRifasController_1.FinalizarRifasController().handle);
 exports.routes.put('/sortear', AdmMiddleware_1.default, new SortearProdutoController_1.SortearProdutoController().handle);
+exports.routes.put('/finalizarsorteio', AdmMiddleware_1.default, new EncerrarSorteioController_1.EncerrarSorteioController().handle);
 //pagamento callback
-exports.routes.get('/sallercallback', new getSaller_1.GetSaller().handle);
-exports.routes.post('/paymentcallback', new verificarPagamento_1.VerificarPagamento().handle);
+exports.routes.get('/sallercallback', new obterContaVendedor_1.ObterContaVendedor().handle);
+exports.routes.post('/paymentcallback', new respostasPagamento_1.RespostasPagamento().handle);

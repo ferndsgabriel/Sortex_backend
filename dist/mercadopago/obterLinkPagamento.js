@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const mercadopago_1 = require("mercadopago");
 const formats_1 = require("../utils/formats");
-function gerarLinkPagamento(_a) {
+function ObterLinkPagamento(_a) {
     return __awaiter(this, arguments, void 0, function* ({ accessToken, amount, description, user, method, sorteioId, qtd }) {
         const aplicacaoAcessToken = process.env.MERCADO_PAG0_ACCESS_TOKEN; // vou usar para poder dividir o pagamento
         const client = new mercadopago_1.MercadoPagoConfig({ accessToken: accessToken, options: { timeout: 5000 } });
@@ -40,9 +40,8 @@ function gerarLinkPagamento(_a) {
             };
         }
         catch (error) {
-            console.log(error);
-            throw new Error('Erro ao gerar link de pagamento');
+            throw (error.code);
         }
     });
 }
-exports.default = gerarLinkPagamento;
+exports.default = ObterLinkPagamento;

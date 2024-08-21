@@ -8,26 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = __importDefault(require("axios"));
-require("dotenv/config");
-const accessToken = process.env.MERCADO_PAG0_ACCESS_TOKEN;
-const axiosPayment = (paymentId) => __awaiter(void 0, void 0, void 0, function* () {
-    const url = `https://api.mercadopago.com/v1/payments/${paymentId}`;
-    try {
-        const response = yield axios_1.default.get(url, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
+exports.FinalizarRifasController = void 0;
+const FinalizarRifasServices_1 = require("../services/FinalizarRifasServices");
+class FinalizarRifasController {
+    handle(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.body;
+            const finalizarSorteioServices = new FinalizarRifasServices_1.FinalizarRifasServices();
+            try {
+                const response = yield finalizarSorteioServices.execute(id);
+                return res.status(200).json(response); //retorno um sucess
+            }
+            catch (error) {
+                return res.status(400).json({ error: error.message });
+                ; //retorno o erro
             }
         });
-        return response;
     }
-    catch (error) {
-        console.error(error.message);
-        throw error;
-    }
-});
-exports.default = axiosPayment;
+}
+exports.FinalizarRifasController = FinalizarRifasController;

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import axiosPayment from './axiosPayment';
+import AxiosVerificarPagameto from './axiosVerificarPagameto';
 import mongoose, { Schema, Document } from 'mongoose';
 import { sorteioSchema } from '../schemas/sorteioShema';
 
@@ -19,7 +19,7 @@ interface SorteioProps extends Document {
 }
 
 
-class VerificarPagamento {
+class RespostasPagamento {
     async handle(req: Request, res: Response) {
 
         // esse é a rota onde o webhoock do mp vai retorna os dados de pagamentos que tiver status alterados
@@ -29,7 +29,7 @@ class VerificarPagamento {
         const id = data.id.toString(); //pego o id do obj data 
     
         try {
-            const response = await axiosPayment(id); // executo um endpoint do mp que devolve todas as informações da compra através do id
+            const response = await AxiosVerificarPagameto(id); // executo um endpoint do mp que devolve todas as informações da compra através do id
             
             const { status, metadata: { sorteio_id: sorteioId, user } } = response.data;
             // pego informações desse endpoint que vou precisar usar
@@ -79,4 +79,4 @@ class VerificarPagamento {
     
 }
 
-export { VerificarPagamento };
+export { RespostasPagamento };
