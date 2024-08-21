@@ -22,8 +22,7 @@ const axiosSaller = async (authCode: string) => {
         const accessToken = response.data.access_token;
         return accessToken;
     } catch (error:any) {
-            const errors:any= {message:error.message, response:error.response}
-            throw new Error(errors)
+            throw new Error(error.response)
     }
 };
 
