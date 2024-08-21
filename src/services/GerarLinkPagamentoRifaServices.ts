@@ -38,13 +38,13 @@ class GerarLinkPagamentoRifaServices {
             throw new Error('Sorteio não encontrado.'); // se não achar o sorteio
         }
 
-        if (procurarSorteio.status === false){
-            throw new Error ("Venda de rifas encerrada");
-        } // se o status estiver como false, significa que as rifas já encerraram 
-        
         if (procurarSorteio.drawn === false){
             throw new Error ("Sorteio encerrado");
         } // se o drawn estiver como false, significa que o sorteio já encerrou
+
+        if (procurarSorteio.status === false){
+            throw new Error ("Venda de rifas encerrada");
+        } // se o status estiver como false, significa que as rifas já encerraram 
 
         const cardModel = mongoose.model('Cartaos', cardSchema); //crio um model de cards
 

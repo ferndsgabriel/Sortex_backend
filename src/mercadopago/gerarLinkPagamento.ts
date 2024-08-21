@@ -17,7 +17,7 @@ interface paymentProps{
 	
 async function gerarLinkPagamento({accessToken, amount, description, user, method, sorteioId, qtd}:paymentProps){
 
-	//const aplicacaoAcessToken = process.env.MERCADO_PAG0_ACCESS_TOKEN as string;
+	const aplicacaoAcessToken = process.env.MERCADO_PAG0_ACCESS_TOKEN as string; // vou usar para poder dividir o pagamento
 
 	const client = new MercadoPagoConfig({ accessToken:accessToken, options: { timeout: 5000} }); 
 
