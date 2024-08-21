@@ -21,8 +21,9 @@ const axiosSaller = async (authCode: string) => {
         });
         const accessToken = response.data.access_token;
         return accessToken;
-    } catch (error:any) {
-            return (error.response)
+    } catch (error) {
+        console.error('Error getting access token:', error.response ? error.response.data : error.message);
+        throw error;
     }
 };
 
