@@ -1,4 +1,3 @@
-```
 # Sortex - Backend
 
 ## About 🚨
@@ -8,7 +7,7 @@ Sortex is a project designed for managing raffles and giveaways. Users can regis
 <img src='https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white' alt='Node'/>
 <img src='https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white' alt='TS'/>
 <img src='https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white' alt='MongoDB'/>    
-<<<<<<< HEAD
+
 
 ## Setup
 
