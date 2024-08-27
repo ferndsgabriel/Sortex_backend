@@ -176,14 +176,17 @@ async function ObterLinkPagamento({accessToken, amount, description, user, sorte
 
 	const porcentagem = 3; 
 	
-	const valorPlataforma = total * (porcentagem / 100);
+	const valuePlataform = parseFloat((total * (porcentagem / 100)).toFixed(2));
+
+	const application = valuePlataform >= 0.01 ? valuePlataform : null;
+
 
 	const client = new MercadoPagoConfig({ accessToken:accessToken }); 
 
 	const payment = new Payment(client);
 
 	const body : any = {
-		application_fee: valorPlataforma,
+		application_fee: application,
 		transaction_amount: total,
 		description: description,
 		payment_method_id: 'pix',
