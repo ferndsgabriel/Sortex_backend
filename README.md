@@ -1,13 +1,4 @@
 ### Sortex - Backend 
-<style>
-a {
-  color:#2374b3;
-}
-.mini{
-    font-size:12px;
-}
-</style>
-
 <div>
     <h2>About 🚨</h2>
     <p>
