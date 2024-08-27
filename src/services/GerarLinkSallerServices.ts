@@ -16,7 +16,7 @@ class GerarLinkSallerServices {
         if (!id) {
             throw new Error("Id não encontrado");
         }
-
+        
         const admModel = mongoose.model('Administradores', admSchema);
         const obterAdm: queryProps | null = await admModel.findById(id);
 

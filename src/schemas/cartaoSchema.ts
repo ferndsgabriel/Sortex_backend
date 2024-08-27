@@ -14,5 +14,6 @@ export const cardSchema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Administradores', 
         required: true,
+        unique:true
     }
 }); 

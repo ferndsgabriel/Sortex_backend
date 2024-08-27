@@ -1796,10 +1796,10 @@ memory-pager@^1.0.2:
   resolved "https://registry.yarnpkg.com/memory-pager/-/memory-pager-1.5.0.tgz#d8751655d22d384682741c972f2c3d6dfa3e66b5"
   integrity sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg==
 
-mercadopago@^2.0.11:
-  version "2.0.11"
-  resolved "https://registry.yarnpkg.com/mercadopago/-/mercadopago-2.0.11.tgz#0f475adab3d0e4041153227d731d177a7cd7c04c"
-  integrity sha512-jK/cqjNqBwSrxl1WrQ9UDwoy3BcFuHG3CKKa5EpQhqQyAbfIf2QjIs01Gw65v+94tL4brTrFgb1Ad8PSSCVPRQ==
+mercadopago@^2.0.13:
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/mercadopago/-/mercadopago-2.0.13.tgz#7ae49191f791e7c5ced96dd7907b0c3b1deee259"
+  integrity sha512-KktKwjimHrRu3unpKFe09yJMseJpOAnxumO776ljJLrlzczqw5GgbKIolhqAGa3DlsCzfrUqBHnR3Nf0qnF9Ag==
   dependencies:
     node-fetch "^2.6.12"
     uuid "^9.0.0"

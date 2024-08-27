@@ -10,7 +10,6 @@ class ObterContaVendedor {
         const authCode = req.query.code as string; // recebo o token da requisição 
         const stateId = req.query.state as string; // recebo o id do user 
 
-
         if (!authCode) {
             res.status(400).json('Código de autorização não encontrado.');
         } // se n tiver o token.... 

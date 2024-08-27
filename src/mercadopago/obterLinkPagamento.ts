@@ -1,6 +1,5 @@
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { formatEmail } from '../utils/formats';
-import axios from 'axios';
 
 interface paymentProps{
 	accessToken:string;
@@ -16,25 +15,22 @@ interface paymentProps{
 }
 	
 async function ObterLinkPagamento({accessToken, amount, description, user,  sorteioId, qtd}:paymentProps){
-	const total = (amount * qtd); // o valor vai ser o preço X a qtd de rifas compradas
 
-	const porcentagem = 3;
-	const valorPlataforma = (total * (porcentagem / 100))
+	const total = amount * qtd;
 
-	const aplicacaoAcessToken = process.env.MERCADO_PAG0_ACCESS_TOKEN as string; // vou usar para poder dividir o pagamento
+	const porcentagem = 3; 
+	
+	const valorPlataforma = total * (porcentagem / 100);
 
-	const client = new MercadoPagoConfig({ accessToken:accessToken, options: { timeout: 5000} }); 
+	const client = new MercadoPagoConfig({ accessToken:accessToken}); 
 
 	const payment = new Payment(client);
 
-
-	
 	const body : any = {
+		application_fee: valorPlataforma,
 		transaction_amount: total,
 		description: description,
 		payment_method_id: 'pix',
-		token:accessToken,
-		application_fee: valorPlataforma,
 		payer: {
 			email: formatEmail(user.email),
 			first_name: user.name.split(' ')[0], // Assume o primeiro nome

@@ -113,7 +113,7 @@ class GerarLinkPagamentoRifaServices {
             user: { email, whatsapp, name }
         }; // crio um obj com informações do user e do pagamento
 
-        for (let x = 0; x < qtd; x++) {
+        for (let x = 0; x != qtd + 1; x++) {
             await sorteioModel.findByIdAndUpdate(
                 sorteioId,
                 { $push: { rifas: newPush } },

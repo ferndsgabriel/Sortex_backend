@@ -11,6 +11,12 @@ const app = express();
 const port = process.env.Port || 3333; // definindo nossa porta
 
 app.use(cors()); // chamando a função
+app.use(cors({
+    origin: 'https://api.mercadopago.com/v1/payments/', 
+    methods: ['GET', 'POST'], 
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Idempotency-Key'],
+}));
+
 app.use(express.json()); // JSON middleware antes das rotas
 app.use(routes); // pedindo pro app usar as rotas do arquivo exportado
 
