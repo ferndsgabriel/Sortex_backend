@@ -1,9 +1,3 @@
-<style>
-a {
-  color:#2374b3;
-}
-</style>
-
 ### Sortex - Backend 
 <div>
     <h2>About 🚨</h2>
