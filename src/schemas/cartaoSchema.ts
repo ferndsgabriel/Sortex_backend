@@ -1,5 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
+const onDay = new Date();
+
 export const cardSchema: Schema = new Schema({
     
     accessToken: {
@@ -15,5 +17,10 @@ export const cardSchema: Schema = new Schema({
         ref: 'Administradores', 
         required: true,
         unique:true
+    },
+    createDate:{
+        type:Date,
+        require:true,
+        default:onDay
     }
 }); 

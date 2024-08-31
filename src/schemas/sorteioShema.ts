@@ -1,5 +1,7 @@
 import { Schema } from "mongoose";
 
+const onDay = new Date();
+
 export const sorteioSchema: Schema = new Schema({
 
     admRef:{
@@ -50,5 +52,10 @@ export const sorteioSchema: Schema = new Schema({
     winner:{
         type:Number,
         default:null // o winner vai ser um index, pq quando gerar o sorteio e tiver um campeão, vai ser o rifas[winner]
+    },
+    createDate:{
+        type:Date,
+        require:true,
+        default:onDay
     }
 }) 

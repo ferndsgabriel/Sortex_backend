@@ -9,6 +9,7 @@ interface queryProps {
     photo: string;
     sub: string;
     __v: number; 
+    sessionToken:string;
 } // tipando os dados que recebo do meu db
 
 class DetalhesAdmServices{
@@ -26,10 +27,14 @@ class DetalhesAdmServices{
         } // se n existir retorno um erro
 
         return ({ // se passar retorno os dados recebidos
-            name:obterAdm.name,
-            email:obterAdm.email,
-            photo:obterAdm.photo,
-            id:obterAdm._id
+            user:{
+                name:obterAdm.name,
+                email:obterAdm.email,
+                photo:obterAdm.photo,
+                _id:obterAdm._id
+            },
+            sessionToken:obterAdm.sessionToken
+
         })
     }
 }

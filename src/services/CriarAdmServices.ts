@@ -3,6 +3,7 @@ import { hash } from 'bcryptjs';
 import 'dotenv/config';
 import {formatEmail} from "../utils/formats";
 import { admSchema } from '../schemas/admSchema';
+import { randomUUID } from 'crypto';
 
 // Definindo a interface dos itens do adm
 interface admProps {
@@ -10,13 +11,14 @@ interface admProps {
     email: string;
     photo: string;
     sub: string;
+    pass:string;
 }
 
 // Classe para criar adm
 class CriarAdmServices {
-    async execute({ name, email, photo, sub }: admProps) {
+    async execute({ name, email, photo, sub, pass }: admProps) {
 
-        if (!name || !email || !photo || !sub) {
+        if (!name || !email || !photo || !sub || !pass) {
             throw new Error('Preencha todos os campos.');
         } // n pode enviar nada vazio
 
@@ -28,6 +30,8 @@ class CriarAdmServices {
         // obs... esse sub é um nome que o google da para token que ele gera quando vc faz login com o google, por isso usei esse nome
         // não usei o login do google no backend, vou fazer isso no front, por isso estou já chamando de sub e criando um hash como se fosse uma senha
 
+        const hashPass = await hash(pass, 8)
+
         const AdmModel = mongoose.model('Administradores',  admSchema); // agora posso fazer operações na tabela adm
 
         const emailformatado = formatEmail(email); //formatar o emailremovendo espaços e uppercase
@@ -38,12 +42,15 @@ class CriarAdmServices {
             throw new Error('Email indisponível');
         } // se tiver um email igual retorno um erro
 
+        const uid = randomUUID();
         // Cria um novo usuário
         const criarAdm = new AdmModel({
             name,
             email:emailformatado,
             photo,
             sub: hashsub,
+            password:hashPass,
+            sessionToken:uid
         });
 
         await criarAdm.save().catch(()=>{

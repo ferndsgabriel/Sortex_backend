@@ -1,5 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
+const onDay = new Date();
+
 export const produtoSchema: Schema = new Schema({
     name: {
         type: String,
@@ -21,5 +23,10 @@ export const produtoSchema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Administradores', 
         required: true,
+    },
+    createDate:{
+        type:Date,
+        require:true,
+        default:onDay
     }
 }); 

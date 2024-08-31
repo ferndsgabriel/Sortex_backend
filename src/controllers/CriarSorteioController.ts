@@ -13,9 +13,9 @@ class CriarSorteioController{
             const response = await criarSorteioServices.execute({
                 productId, dataInicio, dataTermino, price, title,id
             });
-            return res.status(200).json(response)
+            return res.status(201).json(response)
         }catch(error){
-            return res.status(400).json({error:error.message});;
+            return res.status(400).json({error:error.message});
         }
     }
 }

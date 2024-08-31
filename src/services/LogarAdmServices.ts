@@ -5,8 +5,9 @@ import { formatEmail } from '../utils/formats';
 import { sign } from 'jsonwebtoken';
 
 interface admProps {
-    sub: string;
+    sub: string | undefined;
     email: string;
+    pass:string | undefined;
 }
 
 interface queryProps {
@@ -15,14 +16,19 @@ interface queryProps {
         email: string;
         photo: string;
         sub: string;
-        __v: number;
+        password: string;
+        sessionToken:string;
 }
 
 class LogarAdmServives {
-    async execute({ sub, email }: admProps) {
+    async execute({ sub, email, pass }: admProps) {
         
-        if (!sub || !email) {
-            throw new Error("Erro ao logar"); // verifico se recebo todos os dados
+        if (!email) {
+            throw new Error("Preencha todos os campos"); // verifico se recebo todos os dados
+        }
+
+        if (!sub && !pass ){
+            throw new Error("Preencha todos os campos");  // se n recebo nem o sub do google e nem o pass...
         }
 
         const admModel = mongoose.model('Administradores', admSchema); // obtenho uma referencia de admModel
@@ -34,13 +40,15 @@ class LogarAdmServives {
         );
 
         if (!emailExiste) {
-            throw new Error("Erro ao logar"); //se n existir n posso logar
+            throw new Error("Dados inválidos"); //se n existir n posso logar
         }
 
-        const compararSenha = await compare(sub, emailExiste.sub); // comparo o sub recebido com o sub que existe na linha onde peguei meu email
+        const compararSub = await compare(sub, emailExiste.sub); // comparo o sub recebido com o sub que existe na linha onde peguei meu email
 
-        if (!compararSenha) {
-            throw new Error("Erro ao logar"); // se n são iguais eu n posso logar
+        const compararSenha = await compare(pass, emailExiste.password);
+
+        if (!compararSub && !compararSenha) {
+            throw new Error("Dados inválidos"); // se n são iguais eu n posso logar
         }
 
         const ujwtSegredo = process.env.UJWT_ADM; // obtenho o segredo no env
@@ -59,8 +67,16 @@ class LogarAdmServives {
                 expiresIn: "30d",
             }
         );
+        
 
-        return {token: token}; // retorno esse token 
+        const user = {
+            name:emailExiste.name,
+            email:emailExiste.name,
+            photo:emailExiste.photo,
+            _id:emailExiste._id,
+        }
+        
+        return {token: token, user:user, sessionToken:emailExiste.sessionToken}; // retorno esse token 
     }
 }
 

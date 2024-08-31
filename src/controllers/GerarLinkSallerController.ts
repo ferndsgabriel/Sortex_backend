@@ -10,10 +10,10 @@ class GerarLinkSallerController {
 
         try{
             const response = await gerarLinkSallerService.execute(id);
-            return res.status(200).json(response); //retorno um sucess
+            return res.status(201).json(response); //retorno um sucess
             
         }catch(error){
-            return res.status(400).json({error:error.message});; //retorno o erro
+            return res.status(400).json({error:error.message}); //retorno o erro
         }  // bem padrão e simples
     }
 }
