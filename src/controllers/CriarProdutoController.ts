@@ -18,14 +18,14 @@ class CriarProdutoController {
             return res.status(400).json('Imagem não localizada!');
         } // verifico se tenho pelo menos uma foto
 
-        const { name, description, price } = req.body; // os outros itens vou receber no body da requisição
+        const { name, description } = req.body; // os outros itens vou receber no body da requisição
         const id = req.adm_id; //pego o id atraves da tipagem que gerei o request, que recebe o id através do sub do token 
 
         const criarProdutoServices = new CriarProdutoServices(); // instancio o service
 
         try {
             const response = await criarProdutoServices.execute({
-                name, description, price, photos:photos, id
+                name, description, photos:photos, id
             }); // faço um try e catch e retorno um sucesso ou erro
             return res.status(201).json(response);
         } catch (error) {

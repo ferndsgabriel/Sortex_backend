@@ -5,16 +5,15 @@ import { admSchema } from "../schemas/admSchema";
 interface produtoProps{
     name:string,
     description:string,
-    price:number,
     photos:[],
     id:string 
 }
 
 
 class CriarProdutoServices{
-    async execute({name, description, price, photos, id}:produtoProps){
+    async execute({name, description, photos, id}:produtoProps){
         
-        if (!name ||  !description ||  !price  || !id){
+        if (!name ||  !description || !id){
             throw new Error ('Digite todos os campos.');
         } // verifico se recebo itens
 
@@ -40,7 +39,6 @@ class CriarProdutoServices{
             name,
             description,
             photos,
-            price,
             admRef:id
         }); // passou por tudo posso criar o produto
 

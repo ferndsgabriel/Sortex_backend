@@ -2,7 +2,6 @@ import admin from "firebase-admin";
 import { Request, Response, NextFunction } from "express";
 import 'dotenv/config';
 
-
 const privateKey = process.env.FIREBASE_PRIVATE_KEY 
     ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') 
     : undefined;
@@ -22,10 +21,15 @@ const credentialFB: any = {
     "universe_domain": process.env.FIREBASE_DOMAIN
 };
 
-admin.initializeApp({
-    credential: admin.credential.cert(credentialFB),
-    storageBucket: 'gs://sortex-a345f.appspot.com',
-});
+// Verifica se o app Firebase já foi inicializado
+if (!admin.apps.length) {
+    admin.initializeApp({
+        credential: admin.credential.cert(credentialFB),
+        storageBucket: 'gs://sortex-a345f.appspot.com',
+    });
+} else {
+    admin.app(); // Usa o app existente
+}
 
 const storage = admin.storage();
 const bucket = storage.bucket();
@@ -82,3 +86,24 @@ function uploadMiddleware() {
 const uploadMiddlewareInstance = uploadMiddleware();
 
 export default uploadMiddlewareInstance;
+
+async function DeleteImage(imageUrl: string): Promise<void> {
+    try {
+        const decodedUrl = decodeURIComponent(imageUrl);
+        const filePath = decodedUrl.split("https://storage.googleapis.com/sortex-a345f.appspot.com/")[1];
+
+        if (!filePath) {
+            throw new Error("Caminho do arquivo não pôde ser extraído do URL.");
+        }
+
+        const file = bucket.file(filePath);
+        await file.delete();
+
+        console.log(`Imagem deletada com sucesso: ${filePath}`);
+    } catch (error) {
+        console.error(`Erro ao deletar imagem: ${error.message}`);
+        throw new Error(`Erro ao deletar imagem: ${error.message}`);
+    }
+}
+
+export { DeleteImage };

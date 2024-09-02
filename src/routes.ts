@@ -31,6 +31,9 @@ import { DesvincularContaMPController } from "./controllers/DesvincularContaMPCo
 import { DesconectarContaController } from "./controllers/DesconectarContaController";
 import { AlterarSenhaController } from "./controllers/AlterarSenhaController";
 import { AtualizarDadosController } from "./controllers/AtualizarDadosController";
+import { ProdutoDetalhesController } from "./controllers/ProdutoDetalhesController";
+import { DeletarProdutoController } from "./controllers/DeletarProdutoController";
+import { EditarProdutosController } from "./controllers/EditarProdutosController";
 
 //imports pagamento callback
 import { ObterContaVendedor } from "./mercadopago/obterContaVendedor";
@@ -70,8 +73,10 @@ routes.get('/', async (req: Request, res: Response) => {
     routes.post('/authadm', new LogarAdmController().handle); // logar
     routes.get('/adm', AdmMiddleware,  new DetalhesAdmController().handle); // logar
     routes.post('/produtos', AdmMiddleware, Multer.array('files'), uploadMiddlewareInstance, new CriarProdutoController().handle); // criar produto
+    routes.put('/produto/:id', AdmMiddleware, Multer.array('files'), uploadMiddlewareInstance, new EditarProdutosController().handle); // editar produto
     routes.get('/linksaller', AdmMiddleware, new GerarLinkSallerController().handle);
     routes.get('/produtos', AdmMiddleware, new ListProdutosAdmController().handle);
+    routes.get('/produto/:id', AdmMiddleware, new ProdutoDetalhesController().handle);
     routes.post('/sorteio', AdmMiddleware, new CriarSorteioController().handle);
     routes.post('/pagamento',  new GerarLinkPagamentoRifaController().handle);
     routes.put('/finalizarrifas', AdmMiddleware, new FinalizarRifasController().handle);
@@ -88,6 +93,7 @@ routes.get('/', async (req: Request, res: Response) => {
     routes.put('/session', AdmMiddleware, new  DesconectarContaController().handle);
     routes.put('/senha', AdmMiddleware, new  AlterarSenhaController().handle);
     routes.put('/dados', AdmMiddleware, new  AtualizarDadosController().handle);
+    routes.delete('/produto/:id', AdmMiddleware, new DeletarProdutoController().handle);
     //pagamento callback
     routes.get('/sallercallback', new ObterContaVendedor().handle);
     routes.post('/paymentcallback', new RespostasPagamento().handle);

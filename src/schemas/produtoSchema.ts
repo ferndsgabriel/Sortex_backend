@@ -15,10 +15,6 @@ export const produtoSchema: Schema = new Schema({
         type: [],
         required: true,
     },
-    price: {
-        type: Number,
-        required: true,
-    },
     admRef:{
         type: Schema.Types.ObjectId,
         ref: 'Administradores', 
