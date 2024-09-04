@@ -5,18 +5,18 @@ import { produtoSchema } from "../schemas/produtoSchema";
 import { sorteioSchema } from "../schemas/sorteioShema";
 
 interface sorteioProps {
-    id: String;
-    productId: String,
-    dataInicio: Date,
-    dataTermino: Date,
-    price: Number,
-    title: String,
+    id: string;
+    productId: string;
+    dataTermino: Date;
+    price: number,
+    title: string;
+    description:string;
 }
 
 class CriarSorteioServices {
-    async execute({ id, productId, dataInicio, dataTermino, price, title }: sorteioProps) {
+    async execute({ id, productId, dataTermino, price, title, description }: sorteioProps) {
 
-        if (!id || !productId || !dataInicio || !dataTermino || !price || !title) {
+        if (!id || !productId || !dataTermino || !price || !title) {
             throw new Error('Digite todos os campos');
         } // verifico se todos os campos necessarios estão sendo enviados
 
@@ -45,21 +45,20 @@ class CriarSorteioServices {
         
         const onDay = new Date(); // pegando a data atual
 
-        if (new Date(dataInicio) < onDay) {
-            throw new Error('A data de início não pode ser menor que o dia atual');
-        } // verifico se a data de início não é menor que o dia atual
-
         const tempoMaxStart = new Date(); // crio uma variavel para setar o tempo maximo que um sorteio pode começar
 
         tempoMaxStart.setMonth(onDay.getMonth() + 1);  // falo que o periodo limite é de 1 mes
 
-        if (new Date(dataInicio) > tempoMaxStart) {
-            throw new Error('O início do período deve ser no máximo até um mês a partir de hoje.');
-        } // verifico se está respeitando esse limite
 
-        if (new Date(dataInicio) > new Date(dataTermino)) {
+        if (onDay > new Date(dataTermino)) {
             throw new Error('A data de término deve ser maior que a data de início');
         } // n deixo a data de término ser menor que o período de início
+        
+        onDay.setMonth(onDay.getMonth() + 2);
+
+        if (new Date(dataTermino) > onDay) {
+            throw new Error('O sorteio não pode durar mais de 2 meses');
+        }
 
         const sorteioModel = mongoose.model('Sorteio', sorteioSchema); // obtendo o model do sorteio
 
@@ -67,10 +66,10 @@ class CriarSorteioServices {
             admRef: id,
             produtoRef: pegandoProduto._id,
             cartaoRef: pegandoCartao._id,
-            dataInicio,
-            dataTermino,
             price,
             title,
+            description,
+            dataTermino
         });
 
         await newSorteio.save();

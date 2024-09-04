@@ -34,7 +34,8 @@ import { AtualizarDadosController } from "./controllers/AtualizarDadosController
 import { ProdutoDetalhesController } from "./controllers/ProdutoDetalhesController";
 import { DeletarProdutoController } from "./controllers/DeletarProdutoController";
 import { EditarProdutosController } from "./controllers/EditarProdutosController";
-
+import { ListarSorteiosAtivosController } from "./controllers/ListarSorteiosAtivosController";
+import { ListarSorteiosFinalizadosController } from "./controllers/ListarSorteiosFinalizadosController";
 //imports pagamento callback
 import { ObterContaVendedor } from "./mercadopago/obterContaVendedor";
 import { RespostasPagamento } from "./mercadopago/respostasPagamento";
@@ -85,6 +86,8 @@ routes.get('/', async (req: Request, res: Response) => {
     routes.post('/sociais', AdmMiddleware, new CriarSocialMediaController().handle);
     routes.delete('/sociais', AdmMiddleware, new DeletarSocialMediaController().handle);
     routes.get('/sociais', AdmMiddleware, new ListarRedesSociaisController().handle);
+    routes.get('/sorteiosprogress', AdmMiddleware, new ListarSorteiosAtivosController().handle);
+    routes.get('/sorteiosfinished', AdmMiddleware, new ListarSorteiosFinalizadosController().handle);
     routes.post('/recovery', new EnviarLinkRecuperacaoController().handle);
     routes.put('/recovery', new RecuperarSenhaController().handle);
     routes.get('/recovery', new ProcurarCodRecuperacaoController().handle);

@@ -14,18 +14,17 @@ const CriarSorteioServices_1 = require("../services/CriarSorteioServices");
 class CriarSorteioController {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { productId, dataInicio, dataTermino, price, title } = req.body;
+            const { productId, dataTermino, price, title, description } = req.body;
             const id = req.adm_id;
             const criarSorteioServices = new CriarSorteioServices_1.CriarSorteioServices();
             try {
                 const response = yield criarSorteioServices.execute({
-                    productId, dataInicio, dataTermino, price, title, id
+                    productId, dataTermino, price, title, id, description
                 });
-                return res.status(200).json(response);
+                return res.status(201).json(response);
             }
             catch (error) {
                 return res.status(400).json({ error: error.message });
-                ;
             }
         });
     }

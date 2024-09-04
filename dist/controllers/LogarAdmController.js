@@ -14,12 +14,12 @@ const LogarAdmServices_1 = require("../services/LogarAdmServices");
 class LogarAdmController {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { sub, email } = req.body; // peço o sub, e o email
+            const { sub, email, pass } = req.body; // peço o sub, e o email
             //obs... o sub do token de auth e o sub que é usado na hora de cadastrar/logar são diferentes
             //o google devolve esse sub como indentificador de acesso quando vc faz login utiliando a conta do google
             const logarAdmServives = new LogarAdmServices_1.LogarAdmServives(); // instanciar...
             try {
-                const response = yield logarAdmServives.execute({ sub, email });
+                const response = yield logarAdmServives.execute({ sub, email, pass });
                 return res.status(200).json(response); //sucesso
             }
             catch (error) {

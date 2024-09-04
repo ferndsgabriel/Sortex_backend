@@ -19,10 +19,6 @@ export const sorteioSchema: Schema = new Schema({
         required:true,
         ref:'Cartaos'
     },
-    dataInicio:{
-        type:Date,
-        required:true
-    },
     dataTermino:{
         type:Date,
         required:true
@@ -38,6 +34,10 @@ export const sorteioSchema: Schema = new Schema({
     title:{
         type:String,
         required:true,
+    },
+    description: {
+        type: String,
+        required: true,
     },
     status:{
         type:Boolean,

@@ -27,10 +27,13 @@ class DetalhesAdmServices {
                 throw new Error('Administrador não encontrado');
             } // se n existir retorno um erro
             return ({
-                name: obterAdm.name,
-                email: obterAdm.email,
-                photo: obterAdm.photo,
-                id: obterAdm._id
+                user: {
+                    name: obterAdm.name,
+                    email: obterAdm.email,
+                    photo: obterAdm.photo,
+                    _id: obterAdm._id
+                },
+                sessionToken: obterAdm.sessionToken
             });
         });
     }

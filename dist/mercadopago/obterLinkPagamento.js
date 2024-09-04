@@ -12,17 +12,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mercadopago_1 = require("mercadopago");
 const formats_1 = require("../utils/formats");
 function ObterLinkPagamento(_a) {
-    return __awaiter(this, arguments, void 0, function* ({ accessToken, amount, description, user, method, sorteioId, qtd }) {
-        const aplicacaoAcessToken = process.env.MERCADO_PAG0_ACCESS_TOKEN; // vou usar para poder dividir o pagamento
-        const client = new mercadopago_1.MercadoPagoConfig({ accessToken: accessToken, options: { timeout: 5000 } });
+    return __awaiter(this, arguments, void 0, function* ({ accessToken, amount, description, user, sorteioId, qtd }) {
+        const total = amount * qtd;
+        const porcentagem = 3;
+        const valuePlataform = parseFloat((total * (porcentagem / 100)).toFixed(2));
+        const application = valuePlataform >= 0.01 ? valuePlataform : null;
+        const client = new mercadopago_1.MercadoPagoConfig({ accessToken: accessToken });
         const payment = new mercadopago_1.Payment(client);
-        const total = (amount * qtd); // o valor vai ser o preço X a qtd de rifas compradas
         const body = {
+            application_fee: application,
             transaction_amount: total,
             description: description,
-            payment_method_id: method,
+            payment_method_id: 'pix',
             payer: {
                 email: (0, formats_1.formatEmail)(user.email),
+                first_name: user.name.split(' ')[0], // Assume o primeiro nome
+                last_name: user.name.split(' ')[1]
             },
             metadata: {
                 sorteioId: sorteioId,
@@ -40,6 +45,7 @@ function ObterLinkPagamento(_a) {
             };
         }
         catch (error) {
+            console.log(error);
             throw (error.code);
         }
     });

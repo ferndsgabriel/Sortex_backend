@@ -18,11 +18,12 @@ const bcryptjs_1 = require("bcryptjs");
 require("dotenv/config");
 const formats_1 = require("../utils/formats");
 const admSchema_1 = require("../schemas/admSchema");
+const crypto_1 = require("crypto");
 // Classe para criar adm
 class CriarAdmServices {
     execute(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ name, email, photo, sub }) {
-            if (!name || !email || !photo || !sub) {
+        return __awaiter(this, arguments, void 0, function* ({ name, email, photo, sub, pass }) {
+            if (!name || !email || !photo || !sub || !pass) {
                 throw new Error('Preencha todos os campos.');
             } // n pode enviar nada vazio
             if (name.length <= 3) {
@@ -31,18 +32,22 @@ class CriarAdmServices {
             const hashsub = yield (0, bcryptjs_1.hash)(sub, 8); // cria um hash do sub 
             // obs... esse sub é um nome que o google da para token que ele gera quando vc faz login com o google, por isso usei esse nome
             // não usei o login do google no backend, vou fazer isso no front, por isso estou já chamando de sub e criando um hash como se fosse uma senha
+            const hashPass = yield (0, bcryptjs_1.hash)(pass, 8);
             const AdmModel = mongoose_1.default.model('Administradores', admSchema_1.admSchema); // agora posso fazer operações na tabela adm
             const emailformatado = (0, formats_1.formatEmail)(email); //formatar o emailremovendo espaços e uppercase
             const emailExiste = yield AdmModel.findOne({ email: emailformatado }); // verifico se o email está em uso
             if (emailExiste) {
                 throw new Error('Email indisponível');
             } // se tiver um email igual retorno um erro
+            const uid = (0, crypto_1.randomUUID)();
             // Cria um novo usuário
             const criarAdm = new AdmModel({
                 name,
                 email: emailformatado,
                 photo,
                 sub: hashsub,
+                password: hashPass,
+                sessionToken: uid
             });
             yield criarAdm.save().catch(() => {
                 throw new Error('Erro ao criar administrador');

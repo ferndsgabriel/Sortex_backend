@@ -18,11 +18,10 @@ class GerarLinkSallerController {
             const gerarLinkSallerService = new GerarLinkSallerServices_1.GerarLinkSallerServices();
             try {
                 const response = yield gerarLinkSallerService.execute(id);
-                return res.status(200).json(response); //retorno um sucess
+                return res.status(201).json(response); //retorno um sucess
             }
             catch (error) {
-                return res.status(400).json({ error: error.message });
-                ; //retorno o erro
+                return res.status(400).json({ error: error.message }); //retorno o erro
             } // bem padrão e simples
         });
     }

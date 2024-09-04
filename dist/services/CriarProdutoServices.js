@@ -18,8 +18,8 @@ const produtoSchema_1 = require("../schemas/produtoSchema");
 const admSchema_1 = require("../schemas/admSchema");
 class CriarProdutoServices {
     execute(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ name, description, price, photos, id }) {
-            if (!name || !description || !price || !id) {
+        return __awaiter(this, arguments, void 0, function* ({ name, description, photos, id }) {
+            if (!name || !description || !id) {
                 throw new Error('Digite todos os campos.');
             } // verifico se recebo itens
             if (name.length < 2) {
@@ -38,7 +38,6 @@ class CriarProdutoServices {
                 name,
                 description,
                 photos,
-                price,
                 admRef: id
             }); // passou por tudo posso criar o produto
             const response = yield criarProduto.save().catch(() => {

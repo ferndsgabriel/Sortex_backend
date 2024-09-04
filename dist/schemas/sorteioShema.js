@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sorteioSchema = void 0;
 const mongoose_1 = require("mongoose");
+const onDay = new Date();
 exports.sorteioSchema = new mongoose_1.Schema({
     admRef: {
         type: mongoose_1.Schema.Types.ObjectId,
@@ -17,10 +18,6 @@ exports.sorteioSchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
         ref: 'Cartaos'
-    },
-    dataInicio: {
-        type: Date,
-        required: true
     },
     dataTermino: {
         type: Date,
@@ -38,6 +35,10 @@ exports.sorteioSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+        required: true,
+    },
     status: {
         type: Boolean,
         required: true,
@@ -51,5 +52,10 @@ exports.sorteioSchema = new mongoose_1.Schema({
     winner: {
         type: Number,
         default: null // o winner vai ser um index, pq quando gerar o sorteio e tiver um campeão, vai ser o rifas[winner]
+    },
+    createDate: {
+        type: Date,
+        require: true,
+        default: onDay
     }
 });

@@ -20,20 +20,24 @@ const formats_1 = require("../utils/formats");
 const jsonwebtoken_1 = require("jsonwebtoken");
 class LogarAdmServives {
     execute(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ sub, email }) {
-            if (!sub || !email) {
-                throw new Error("Erro ao logar"); // verifico se recebo todos os dados
+        return __awaiter(this, arguments, void 0, function* ({ sub, email, pass }) {
+            if (!email) {
+                throw new Error("Preencha todos os campos"); // verifico se recebo todos os dados
+            }
+            if (!sub && !pass) {
+                throw new Error("Preencha todos os campos"); // se n recebo nem o sub do google e nem o pass...
             }
             const admModel = mongoose_1.default.model('Administradores', admSchema_1.admSchema); // obtenho uma referencia de admModel
             const emailFormatado = (0, formats_1.formatEmail)(email); // formato o email
             const emailExiste = yield admModel.findOne(// verifico se este email existe no meu banco
             { email: emailFormatado });
             if (!emailExiste) {
-                throw new Error("Erro ao logar"); //se n existir n posso logar
+                throw new Error("Dados inválidos"); //se n existir n posso logar
             }
-            const compararSenha = yield (0, bcryptjs_1.compare)(sub, emailExiste.sub); // comparo o sub recebido com o sub que existe na linha onde peguei meu email
-            if (!compararSenha) {
-                throw new Error("Erro ao logar"); // se n são iguais eu n posso logar
+            const compararSub = yield (0, bcryptjs_1.compare)(sub, emailExiste.sub); // comparo o sub recebido com o sub que existe na linha onde peguei meu email
+            const compararSenha = yield (0, bcryptjs_1.compare)(pass, emailExiste.password);
+            if (!compararSub && !compararSenha) {
+                throw new Error("Dados inválidos"); // se n são iguais eu n posso logar
             }
             const ujwtSegredo = process.env.UJWT_ADM; // obtenho o segredo no env
             if (!ujwtSegredo) {
@@ -46,7 +50,13 @@ class LogarAdmServives {
                 subject: emailExiste._id.toString(),
                 expiresIn: "30d",
             });
-            return { token: token }; // retorno esse token 
+            const user = {
+                name: emailExiste.name,
+                email: emailExiste.name,
+                photo: emailExiste.photo,
+                _id: emailExiste._id,
+            };
+            return { token: token, user: user, sessionToken: emailExiste.sessionToken }; // retorno esse token 
         });
     }
 }

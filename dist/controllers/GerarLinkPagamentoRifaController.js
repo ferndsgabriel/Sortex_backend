@@ -14,17 +14,16 @@ const GerarLinkPagamentoRifaServices_1 = require("../services/GerarLinkPagamento
 class GerarLinkPagamentoRifaController {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { sorteioId, metodoDePagamento, email, name, whatsapp, qtd } = req.body;
+            const { sorteioId, email, name, whatsapp, qtd } = req.body;
             const gerarLinkPagamentoRifaServices = new GerarLinkPagamentoRifaServices_1.GerarLinkPagamentoRifaServices();
             try {
                 const response = yield gerarLinkPagamentoRifaServices.execute({
-                    sorteioId, metodoDePagamento, email, name, whatsapp, qtd
+                    sorteioId, email, name, whatsapp, qtd
                 });
                 return res.status(200).json(response);
             }
             catch (error) {
                 return res.status(400).json({ error: error.message });
-                ;
             }
         });
     }

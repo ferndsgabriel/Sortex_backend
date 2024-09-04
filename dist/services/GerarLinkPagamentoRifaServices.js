@@ -20,8 +20,8 @@ const cartaoSchema_1 = require("../schemas/cartaoSchema");
 const atualizarAcessToken_1 = __importDefault(require("../mercadopago/atualizarAcessToken"));
 class GerarLinkPagamentoRifaServices {
     execute(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ sorteioId, metodoDePagamento, email, name, whatsapp, qtd }) {
-            if (!sorteioId || !metodoDePagamento || !email || !name || !whatsapp || qtd <= 0) {
+        return __awaiter(this, arguments, void 0, function* ({ sorteioId, email, name, whatsapp, qtd }) {
+            if (!sorteioId || !email || !name || !whatsapp || qtd <= 0) {
                 throw new Error('Preencha todos os campos');
             } // verifico se estou recebendo todos os parametros
             const sorteioModel = mongoose_1.default.model('Sorteios', sorteioShema_1.sorteioSchema); // crio uma model de sorteios
@@ -52,7 +52,6 @@ class GerarLinkPagamentoRifaServices {
                     amount: preco,
                     description: descricao,
                     user: { name, email, whatsapp },
-                    method: metodoDePagamento,
                     sorteioId,
                     qtd
                 }); // primeiro, tento obter a resposta usando os dados atuais, se n consigo...
@@ -74,7 +73,6 @@ class GerarLinkPagamentoRifaServices {
                             amount: preco,
                             description: descricao,
                             user: { name, email, whatsapp },
-                            method: metodoDePagamento,
                             sorteioId,
                             qtd
                         }); // agora tento gerar um novo link através desse novo acess token
@@ -97,12 +95,12 @@ class GerarLinkPagamentoRifaServices {
                 status,
                 user: { email, whatsapp, name }
             }; // crio um obj com informações do user e do pagamento
-            for (let x = 0; x < qtd; x++) {
+            for (let x = 0; x != qtd + 1; x++) {
                 yield sorteioModel.findByIdAndUpdate(sorteioId, { $push: { rifas: newPush } }, { new: true }).catch((error) => {
                     throw new Error('Erro ao atualizar rifas no banco de dados');
                 }); // faço um for para adicionar a rifa a qtd de rifas compradas
             }
-            return response; // retorno a resposta 
+            return response; // retorno a resposta
         });
     }
 }
