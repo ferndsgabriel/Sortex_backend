@@ -29,17 +29,12 @@ class CriarSocialMediaServices {
             }
             const socialModel = mongoose_1.default.model("Sociais", socialSchema_1.socialSchema);
             const socialCadastrada = yield socialModel.findOne({ admRef: adm });
-            const updateFields = {};
-            if (instagram)
-                updateFields.instagram = instagram;
-            if (twitch)
-                updateFields.twitch = twitch;
-            if (youtube)
-                updateFields.youtube = youtube;
-            if (tiktok)
-                updateFields.tiktok = tiktok;
+            const baseLink = 'https://www.';
             if (socialCadastrada) {
-                yield socialModel.updateOne({ admRef: adm }, { $set: { instagram: instagram, twitch: twitch, youtube: youtube, tiktok: tiktok } });
+                yield socialModel.updateOne({ admRef: adm }, { $set: { instagram: `${baseLink}${instagram}`,
+                        twitch: `${baseLink}${twitch}`,
+                        youtube: `${baseLink}${youtube}`,
+                        tiktok: `${baseLink}${tiktok}` } });
             }
             else {
                 yield socialModel.create({ admRef: adm }, { $set: { instagram: instagram, twitch: twitch, youtube: youtube, tiktok: tiktok } });

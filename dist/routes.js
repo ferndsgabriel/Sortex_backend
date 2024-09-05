@@ -20,24 +20,26 @@ const multer_1 = __importDefault(require("multer"));
 const AdmMiddleware_1 = __importDefault(require("./middlewares/AdmMiddleware"));
 const FirebaseMiddlewara_1 = __importDefault(require("./middlewares/FirebaseMiddlewara"));
 //imports controlles
+//import no auth
 const mongo_1 = require("./mongo");
 const CriarAdmController_1 = require("./controllers/CriarAdmController");
+const EnviarLinkRecuperacaoController_1 = require("./controllers/EnviarLinkRecuperacaoController");
+const RecuperarSenhaController_1 = require("./controllers/RecuperarSenhaController");
 const LogarAdmController_1 = require("./controllers/LogarAdmController");
+const GerarLinkPagamentoRifaController_1 = require("./controllers/GerarLinkPagamentoRifaController");
+const ProcurarCodRecuperacaoController_1 = require("./controllers/ProcurarCodRecuperacaoController");
+// imports auth
 const DetalhesAdmController_1 = require("./controllers/DetalhesAdmController");
 const CriarProdutoController_1 = require("./controllers/CriarProdutoController");
 const GerarLinkSallerController_1 = require("./controllers/GerarLinkSallerController");
 const ListProdutosAdmController_1 = require("./controllers/ListProdutosAdmController");
 const CriarSorteioController_1 = require("./controllers/CriarSorteioController");
-const GerarLinkPagamentoRifaController_1 = require("./controllers/GerarLinkPagamentoRifaController");
 const FinalizarRifasController_1 = require("./controllers/FinalizarRifasController");
 const SortearProdutoController_1 = require("./controllers/SortearProdutoController");
 const EncerrarSorteioController_1 = require("./controllers/EncerrarSorteioController");
 const CriarSocialMediaController_1 = require("./controllers/CriarSocialMediaController");
 const DeletarSocialMediaController_1 = require("./controllers/DeletarSocialMediaController");
 const ListarRedesSociaisController_1 = require("./controllers/ListarRedesSociaisController");
-const EnviarLinkRecuperacaoController_1 = require("./controllers/EnviarLinkRecuperacaoController");
-const RecuperarSenhaController_1 = require("./controllers/RecuperarSenhaController");
-const ProcurarCodRecuperacaoController_1 = require("./controllers/ProcurarCodRecuperacaoController");
 const ContaMercadoPagoController_1 = require("./controllers/ContaMercadoPagoController");
 const DesvincularContaMPController_1 = require("./controllers/DesvincularContaMPController");
 const DesconectarContaController_1 = require("./controllers/DesconectarContaController");
@@ -48,6 +50,7 @@ const DeletarProdutoController_1 = require("./controllers/DeletarProdutoControll
 const EditarProdutosController_1 = require("./controllers/EditarProdutosController");
 const ListarSorteiosAtivosController_1 = require("./controllers/ListarSorteiosAtivosController");
 const ListarSorteiosFinalizadosController_1 = require("./controllers/ListarSorteiosFinalizadosController");
+const RifaDetalhesController_1 = require("./controllers/RifaDetalhesController");
 //imports pagamento callback
 const obterContaVendedor_1 = require("./mercadopago/obterContaVendedor");
 const respostasPagamento_1 = require("./mercadopago/respostasPagamento");
@@ -79,8 +82,15 @@ exports.routes.get('/mongo', (req, res, next) => __awaiter(void 0, void 0, void 
     }
 }));
 //endpoints rotas de paginas
+// rotas sem autenticação
 exports.routes.post('/adm', new CriarAdmController_1.CriarAdmController().handle); // cadastrar
 exports.routes.post('/authadm', new LogarAdmController_1.LogarAdmController().handle); // logar
+exports.routes.get('/raffle', new RifaDetalhesController_1.RifaDetalhesController().handle);
+exports.routes.post('/pagamento', new GerarLinkPagamentoRifaController_1.GerarLinkPagamentoRifaController().handle);
+exports.routes.post('/recovery', new EnviarLinkRecuperacaoController_1.EnviarLinkRecuperacaoController().handle);
+exports.routes.put('/recovery', new RecuperarSenhaController_1.RecuperarSenhaController().handle);
+exports.routes.get('/recovery', new ProcurarCodRecuperacaoController_1.ProcurarCodRecuperacaoController().handle);
+// rotas com autenticação
 exports.routes.get('/adm', AdmMiddleware_1.default, new DetalhesAdmController_1.DetalhesAdmController().handle); // logar
 exports.routes.post('/produtos', AdmMiddleware_1.default, Multer.array('files'), FirebaseMiddlewara_1.default, new CriarProdutoController_1.CriarProdutoController().handle); // criar produto
 exports.routes.put('/produto/:id', AdmMiddleware_1.default, Multer.array('files'), FirebaseMiddlewara_1.default, new EditarProdutosController_1.EditarProdutosController().handle); // editar produto
@@ -88,7 +98,6 @@ exports.routes.get('/linksaller', AdmMiddleware_1.default, new GerarLinkSallerCo
 exports.routes.get('/produtos', AdmMiddleware_1.default, new ListProdutosAdmController_1.ListProdutosAdmController().handle);
 exports.routes.get('/produto/:id', AdmMiddleware_1.default, new ProdutoDetalhesController_1.ProdutoDetalhesController().handle);
 exports.routes.post('/sorteio', AdmMiddleware_1.default, new CriarSorteioController_1.CriarSorteioController().handle);
-exports.routes.post('/pagamento', new GerarLinkPagamentoRifaController_1.GerarLinkPagamentoRifaController().handle);
 exports.routes.put('/finalizarrifas', AdmMiddleware_1.default, new FinalizarRifasController_1.FinalizarRifasController().handle);
 exports.routes.put('/sortear', AdmMiddleware_1.default, new SortearProdutoController_1.SortearProdutoController().handle);
 exports.routes.put('/finalizarsorteio', AdmMiddleware_1.default, new EncerrarSorteioController_1.EncerrarSorteioController().handle);
@@ -97,9 +106,6 @@ exports.routes.delete('/sociais', AdmMiddleware_1.default, new DeletarSocialMedi
 exports.routes.get('/sociais', AdmMiddleware_1.default, new ListarRedesSociaisController_1.ListarRedesSociaisController().handle);
 exports.routes.get('/sorteiosprogress', AdmMiddleware_1.default, new ListarSorteiosAtivosController_1.ListarSorteiosAtivosController().handle);
 exports.routes.get('/sorteiosfinished', AdmMiddleware_1.default, new ListarSorteiosFinalizadosController_1.ListarSorteiosFinalizadosController().handle);
-exports.routes.post('/recovery', new EnviarLinkRecuperacaoController_1.EnviarLinkRecuperacaoController().handle);
-exports.routes.put('/recovery', new RecuperarSenhaController_1.RecuperarSenhaController().handle);
-exports.routes.get('/recovery', new ProcurarCodRecuperacaoController_1.ProcurarCodRecuperacaoController().handle);
 exports.routes.get('/account', AdmMiddleware_1.default, new ContaMercadoPagoController_1.ContaMercadoPagoController().handle);
 exports.routes.delete('/account', AdmMiddleware_1.default, new DesvincularContaMPController_1.DesvincularContaMPController().handle);
 exports.routes.put('/session', AdmMiddleware_1.default, new DesconectarContaController_1.DesconectarContaController().handle);

@@ -22,8 +22,8 @@ class ListProdutosAdmServices {
                 throw new Error('Envie um id');
             } // mando um erro se n tiver um id
             const produtosModel = mongoose_1.default.model('Produtos', produtoSchema_1.produtoSchema); //obtenho a model de produtos
-            const findAll = produtosModel.find({ admRef: id }).sort({ name: 1 }); // busco todos os produtos que tenho o adm como ref
-            return findAll; //retorno todos os produtos
+            const procurarTodos = produtosModel.find({ admRef: id }); // busco todos os produtos que tenho o adm como ref
+            return procurarTodos; //retorno todos os produtos
         });
     }
 }

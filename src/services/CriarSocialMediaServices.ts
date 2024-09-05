@@ -29,15 +29,13 @@ class CriarSocialMediaServices {
 
         const socialCadastrada = await socialModel.findOne({ admRef: adm });
 
-        const updateFields: { [key: string]: string } = {};
-
-        if (instagram) updateFields.instagram = instagram;
-        if (twitch) updateFields.twitch = twitch;
-        if (youtube) updateFields.youtube = youtube;
-        if (tiktok) updateFields.tiktok = tiktok;
+        const baseLink = 'https://www.'
 
         if (socialCadastrada) {
-            await socialModel.updateOne({ admRef: adm }, { $set:{instagram:instagram, twitch:twitch, youtube:youtube, tiktok:tiktok} });
+            await socialModel.updateOne({ admRef: adm }, { $set:{instagram:`${baseLink}${instagram}`, 
+            twitch:`${baseLink}${twitch}`, 
+            youtube:`${baseLink}${youtube}`, 
+            tiktok:`${baseLink}${tiktok}`} });
         } 
         else {
             await socialModel.create({ admRef: adm }, { $set:{instagram:instagram, twitch:twitch, youtube:youtube, tiktok:tiktok} });

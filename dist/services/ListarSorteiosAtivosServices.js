@@ -28,17 +28,17 @@ class ListarSorteiosAtivosServices {
                 throw new Error("Administrador não encontrado");
             }
             const sorteioModal = mongoose_1.default.model('Sorteios', sorteioShema_1.sorteioSchema);
-            const procurarSoreios = yield sorteioModal.find({ admRef: id, drawn: true }).catch((error) => {
+            const procurarSorteios = yield sorteioModal.find({ admRef: id, drawn: true }).catch((error) => {
                 console.log(error);
                 throw new Error('Erro ao encontrar sorteios');
             });
             const per_page_number = parseInt(per_page);
             const pages_number = parseInt(page);
-            const pagesMax = Math.ceil(procurarSoreios.length / per_page_number);
+            const pagesMax = Math.ceil(procurarSorteios.length / per_page_number);
             const sendPage = Math.max(1, Math.min(pages_number, pagesMax));
             const sliceStart = (sendPage - 1) * per_page_number;
             const sliceEnd = (sendPage * per_page_number);
-            const sliceSorteio = procurarSoreios.slice(sliceStart, sliceEnd);
+            const sliceSorteio = procurarSorteios.slice(sliceStart, sliceEnd);
             return {
                 itens: sliceSorteio,
                 maxPages: pagesMax
