@@ -46,6 +46,7 @@ class RifaDetalhesServices {
             const sociaisModel = mongoose_1.default.model('Sociais', socialSchema_1.socialSchema);
             const procurarSociais = yield sociaisModel.findOne({ admRef: procurarSorteio.admRef });
             const sorteio = {
+                _id: procurarSorteio._id,
                 title: procurarSorteio.title,
                 description: procurarSorteio.description,
                 price: procurarSorteio.price,

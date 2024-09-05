@@ -6,6 +6,7 @@ import { socialSchema } from "../schemas/socialSchema";
 
 
 interface sorteioProps { 
+    _id:string;
     admRef:string;
     produtoRef:string;
     dataTermino:Date
@@ -79,6 +80,7 @@ class RifaDetalhesServices{
         
 
         const sorteio = {
+            _id:procurarSorteio._id,
             title:procurarSorteio.title,
             description:procurarSorteio.description,
             price:procurarSorteio.price,
