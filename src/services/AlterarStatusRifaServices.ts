@@ -2,7 +2,7 @@ import mongoose, { Types } from "mongoose";
 import { sorteioSchema } from "../schemas/sorteioShema";
 import AxiosVerificarPagameto from "../mercadopago/axiosVerificarPagameto";
 
-interface sorteioProps {
+/*interface sorteioProps {
     rifas: [{
         id: number,
         status: string,
@@ -12,10 +12,15 @@ interface sorteioProps {
             email: string
         }
     }]
+}*/
+
+interface sorteioProps{
+    dataTermino:Date,
+    status:boolean
 }
 
-class FinalizarRifasServices {
-    async execute(id: Types.ObjectId) {
+class AlterarStatusRifaServices {
+    async execute(id:string, status:boolean) {
 
         if (!id){
             throw new Error('Id não enviado');
@@ -28,8 +33,14 @@ class FinalizarRifasServices {
             throw new Error('Sorteio não encontrado');
         }
 
-        let aprovados: any[] = [];
+        const onDay = new Date();
 
+        if (status === true &&   procurarSorteio.dataTermino <= onDay){
+            throw new Error ('Altere a data de término do sorteio');
+        }
+
+        /*
+        let aprovados: any[] = [];
         const analisar = procurarSorteio.rifas.map(async (item) => {
             const id = item.id.toString();
             const response = await AxiosVerificarPagameto(id);
@@ -48,10 +59,10 @@ class FinalizarRifasServices {
 
         // Aguardando todas as Promises serem resolvidas
         await Promise.all(analisar);
-
-        await sorteioModel.updateOne({ _id: id }, { $set: { rifas: aprovados, status: false } }).then(() => {
-            console.log(aprovados);
-            return aprovados;
+        */
+    
+        await sorteioModel.updateOne({ _id: id }, { $set: {status: status } }).then(() => {
+            return {ok:true}
         }).catch((error) => {
             console.log(error);
             return error;
@@ -59,4 +70,4 @@ class FinalizarRifasServices {
     }
 }
 
-export { FinalizarRifasServices }
+export { AlterarStatusRifaServices }

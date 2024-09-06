@@ -24,7 +24,7 @@ import { CriarProdutoController } from "./controllers/CriarProdutoController";
 import { GerarLinkSallerController } from "./controllers/GerarLinkSallerController";
 import { ListProdutosAdmController } from "./controllers/ListProdutosAdmController";
 import { CriarSorteioController } from "./controllers/CriarSorteioController";
-import { FinalizarRifasController } from "./controllers/FinalizarRifasController";
+import { AlterarStatusRifaController } from "./controllers/AlterarStatusRifaController";
 import { SortearProdutoController } from "./controllers/SortearProdutoController";
 import { EncerrarSorteioController } from "./controllers/EncerrarSorteioController";
 import { CriarSocialMediaController } from "./controllers/CriarSocialMediaController";
@@ -94,7 +94,7 @@ routes.get('/', async (req: Request, res: Response) => {
     routes.get('/produtos', AdmMiddleware, new ListProdutosAdmController().handle);
     routes.get('/produto/:id', AdmMiddleware, new ProdutoDetalhesController().handle);
     routes.post('/sorteio', AdmMiddleware, new CriarSorteioController().handle);
-    routes.put('/finalizarrifas', AdmMiddleware, new FinalizarRifasController().handle);
+    routes.put('/status', AdmMiddleware, new AlterarStatusRifaController().handle);
     routes.put('/sortear', AdmMiddleware, new SortearProdutoController().handle);
     routes.put('/finalizarsorteio', AdmMiddleware, new EncerrarSorteioController().handle);
     routes.post('/sociais', AdmMiddleware, new CriarSocialMediaController().handle);
